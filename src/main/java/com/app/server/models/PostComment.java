@@ -1,6 +1,6 @@
 package com.app.server.models;
 
-public class PostedComment {
+public class PostComment {
     public String getId() {
         return id;
     }
@@ -44,7 +44,7 @@ public class PostedComment {
     String userId;
 
 
-    public PostedComment(String postId, String content, String time, String userId) {
+    public PostComment(String postId, String content, String time, String userId) {
         this.postId = postId;
         this.content = content;
         this.time = time;

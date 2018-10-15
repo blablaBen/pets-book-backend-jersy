@@ -2,7 +2,7 @@ package com.app.server.models;
 
 import java.util.List;
 
-public class PostedStatus {
+public class PostStatus {
     public String getId() {
         return id;
     }
@@ -55,12 +55,11 @@ public class PostedStatus {
     int commentCount;
 
 
-    public PostedStatus(String userId, String textValue, List<String> pictures, String date, int commentCount) {
+    public PostStatus(String userId, String textValue, List<String> pictures, String date) {
         this.userId = userId;
         this.textValue = textValue;
         this.pictures = pictures;
         this.date = date;
-        this.commentCount = commentCount;
     }
 
     public void setId(String id) {
