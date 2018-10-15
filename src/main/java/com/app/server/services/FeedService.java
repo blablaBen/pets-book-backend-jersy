@@ -138,6 +138,7 @@ public class FeedService {
             item.append("url", picUrl);
             pictures.add(item);
         }
+        doc.append("pictures", pictures);
         return doc;
     }
 
