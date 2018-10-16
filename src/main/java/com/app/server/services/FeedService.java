@@ -1,5 +1,6 @@
 package com.app.server.services;
 
+import com.app.server.models.PostComment;
 import com.app.server.models.PostStatus;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +24,11 @@ public class FeedService {
     private static FeedService self;
     private ObjectWriter ow;
     private MongoCollection<Document> postedStatusCollection = null;
+    private MongoCollection<Document> commentCollection = null;
 
     private FeedService() {
         this.postedStatusCollection = MongoPool.getInstance().getCollection("poststatus");
+        this.commentCollection = MongoPool.getInstance().getCollection("comment");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     }
@@ -171,5 +175,63 @@ public class FeedService {
                 item.getString("date"));
         return status;
     }
+
+    public Object createComment(String postId, Object request) {
+        try {
+            JSONObject json = null;
+            json = new JSONObject(ow.writeValueAsString(request));
+            PostComment comment = this.convertJsonToPostComment(postId, json);
+            commentCollection.insertOne(convertPostCommentToDocument(comment));
+            return comment;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Object deleteComment(String commentId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", new ObjectId(commentId));
+
+        commentCollection.deleteOne(query);
+
+        return new JSONObject();
+    }
+
+    public ArrayList<PostComment> getAllComments(String postId) {
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("postId", postId);
+
+        FindIterable<Document> items = commentCollection.find(query);
+        ArrayList<PostComment> result = new ArrayList();
+        for(Document item : items) {
+            result.add(convertDocumentToPostComment(item));
+        }
+
+        return result;
+    }
+
+    private PostComment convertJsonToPostComment(String postId, JSONObject item) {
+        PostComment status = new PostComment(postId, item.getString("content"), item.getString("time"), item.getString("userId") );
+        return status;
+    }
+
+    private Document convertPostCommentToDocument(PostComment comment) {
+        Document doc = new Document("postId", comment.getPostId())
+                .append("content", comment.getContent())
+                .append("time", comment.getTime())
+                .append("userId", comment.getUserId());
+        return doc;
+    }
+
+    private PostComment convertDocumentToPostComment(Document item) {
+        PostComment post = new PostComment(item.getString("postId"), item.getString("content"), item.getString("time"), item.getString("userId"));
+        post.setId(item.getObjectId("_id").toString());
+        return post;
+    }
+
+
+
 
 }

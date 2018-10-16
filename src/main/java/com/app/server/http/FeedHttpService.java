@@ -10,6 +10,7 @@ import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @Path("newFeeds")
 public class FeedHttpService {
@@ -69,6 +70,30 @@ public class FeedHttpService {
     public APPResponse delete(@PathParam("id") String id) {
 
         return new APPResponse(service.delete(id));
+    }
+
+
+    @GET
+    @Path("{postId}/comments")
+    @Produces({ MediaType.APPLICATION_JSON})
+    public APPResponse getComments(@PathParam("postId") String postId) {
+
+        return new APPResponse(service.getAllComments(postId));
+    }
+
+    @POST
+    @Path("{postId}/comments")
+    @Consumes({ MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.APPLICATION_JSON})
+    public APPResponse createComment(@PathParam("postId") String postId, Object request) {
+        return new APPResponse(service.createComment(postId, request));
+    }
+
+    @DELETE
+    @Path("{postId}/comments/{commentId}")
+    @Produces({ MediaType.APPLICATION_JSON})
+    public APPResponse  deleteComment(@PathParam("commentId") String commentId) {
+        return new APPResponse(service.deleteComment(commentId));
     }
 
 }
