@@ -142,8 +142,6 @@ public class FeedService {
         return doc;
     }
 
-
-
     private PostStatus convertDocumentToPostedStatus(Document item) {
         List<Document> pictures = (List<Document>)item.get("pictures");
         List<String> picturesList = new ArrayList();

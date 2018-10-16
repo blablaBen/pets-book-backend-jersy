@@ -37,11 +37,20 @@ public class PostComment {
         this.userId = userId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     String id=null;
     String postId;
     String content;
     String time;
     String userId;
+    String username;
 
 
     public PostComment(String postId, String content, String time, String userId) {
