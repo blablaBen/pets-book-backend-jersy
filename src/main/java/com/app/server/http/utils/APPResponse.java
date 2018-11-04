@@ -10,4 +10,11 @@ public class APPResponse {
 
     public APPResponse() {
     }
+
+    public APPResponse(int code, Object dataParam) {
+
+        this.httpStatusCode = code;
+        this.data = dataParam;
+    }
+
 }
