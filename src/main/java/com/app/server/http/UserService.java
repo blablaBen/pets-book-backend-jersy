@@ -11,7 +11,11 @@ import javax.ws.rs.core.MediaType;
 @Path("user")
 public class UserService {
 
-    UserInterface userInterface = new UserInterface();
+    UserInterface userInterface;
+
+    public UserService() {
+        this.userInterface = UserInterface.getInstance();
+    }
 
     //create a user
     @POST

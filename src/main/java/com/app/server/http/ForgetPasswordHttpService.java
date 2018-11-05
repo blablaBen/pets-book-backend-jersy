@@ -11,7 +11,11 @@ import javax.ws.rs.core.MediaType;
 @Path("forgetPassword")
 public class ForgetPasswordHttpService {
 
-    ForgetPasswordService forgetInterface = new ForgetPasswordService();
+    ForgetPasswordService forgetInterface;
+
+    public ForgetPasswordHttpService() {
+        this.forgetInterface = ForgetPasswordService.getInstance();
+    }
 
     // User requests the system to send the email when they forget password with their registered email address
     @POST

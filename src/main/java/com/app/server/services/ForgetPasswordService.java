@@ -25,8 +25,14 @@ public class ForgetPasswordService {
     public ForgetPasswordService() {
         this.collection = MongoPool.getInstance().getCollection("forgetPassword");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        userInterface = new UserInterface();
+        userInterface = UserInterface.getInstance();
 
+    }
+
+    public static ForgetPasswordService getInstance() {
+        if (self == null)
+            self = new ForgetPasswordService();
+        return self;
     }
 
     public boolean create(Object request) {

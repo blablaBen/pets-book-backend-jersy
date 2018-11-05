@@ -12,7 +12,11 @@ import java.util.ArrayList;
 @Path("user/{userId}/follow")
 public class FollowService {
 
-    FollowInterface followInterface = new FollowInterface();
+    FollowInterface followInterface;
+
+    public FollowService() {
+        this.followInterface = FollowInterface.getInstance();
+    }
 
     //GET Follow - All
     @GET

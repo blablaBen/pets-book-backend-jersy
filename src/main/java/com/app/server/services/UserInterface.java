@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class UserInterface {
-    private static FeedService self;
+    private static UserInterface self;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
     private MongoCollection<Document> petProfileCollection = null;
@@ -30,6 +30,12 @@ public class UserInterface {
         this.collection = MongoPool.getInstance().getCollection("user");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
+    }
+
+    public static UserInterface getInstance() {
+        if (self == null)
+            self = new UserInterface();
+        return self;
     }
 
 

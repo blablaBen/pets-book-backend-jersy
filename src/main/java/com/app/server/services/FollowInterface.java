@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class FollowInterface {
 
-
+    private static FollowInterface self;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
 
@@ -26,6 +26,11 @@ public class FollowInterface {
 
     }
 
+    public static FollowInterface getInstance() {
+        if (self == null)
+            self = new FollowInterface();
+        return self;
+    }
 
     public ArrayList<String> getAll(String userId, int type) {
 
