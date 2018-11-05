@@ -1,6 +1,7 @@
 package com.app.server.services;
 
 
+import com.app.server.models.PetProfile;
 import com.app.server.models.User;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ public class UserInterface {
     private static FeedService self;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
+    private MongoCollection<Document> petProfileCollection = null;
     FollowInterface followInterface = new FollowInterface();
 
 
@@ -150,6 +152,40 @@ public class UserInterface {
         return new JSONObject();
     }
 
+    public ArrayList<PetProfile> getAllPets(String ownerUserId) {
+        ArrayList<PetProfile> pets = new ArrayList<PetProfile>();
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("ownerUserId", ownerUserId);
+
+        FindIterable<Document> results = petProfileCollection.find(query);
+        if (results == null) {
+            return pets;
+        }
+        for (Document item : results) {
+            PetProfile pet = convertDocumentToPetProfile(item);
+            pets.add(pet);
+        }
+        return pets;
+    }
+
+    public PetProfile createPetProfile(Object obj) {
+
+        try {
+            JSONObject json = null;
+            json = new JSONObject(ow.writeValueAsString(obj));
+            PetProfile pet = convertJsonToPetProfile(json);
+            Document doc = convertPetProfileToDocument(pet);
+            collection.insertOne(doc);
+            ObjectId id = (ObjectId) doc.get("_id");
+            pet.setId(id.toString());
+            return pet;
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to create a document");
+            return null;
+        }
+
+    }
 
     private Document convertUserToDocument(User user) {
 
@@ -161,6 +197,14 @@ public class UserInterface {
                 .append("userLevel", user.getUserLevel())
                 .append("userScore", user.getUserScore())
                 .append("portraitUrl", user.getPortraitUrl());
+        return doc;
+    }
+
+    private Document convertPetProfileToDocument(PetProfile petProfile) {
+
+        Document doc = new Document("ownerUserId", petProfile.getOwnerUserId())
+                .append("description", petProfile.getDescription())
+                .append("portraitUrl", petProfile.getPortraitUrl());
         return doc;
     }
 
@@ -180,6 +224,12 @@ public class UserInterface {
         return user;
     }
 
+    private PetProfile convertDocumentToPetProfile(Document item) {
+        PetProfile profile = new PetProfile(item.getString("ownerUserId"), item.getString("description"), item.getString("portraitUrl"));
+        profile.setId(item.getObjectId("_id").toString());
+        return profile;
+    }
+
     private User convertJsonToUser(JSONObject json) {
         User user = new User(
                 json.getString("email"),
@@ -193,5 +243,10 @@ public class UserInterface {
 
         );
         return user;
+    }
+
+    private PetProfile convertJsonToPetProfile(JSONObject json) {
+       PetProfile profile = new PetProfile(json.getString("ownerUserId"), json.getString("description"), json.getString("portraitUrl"));
+       return profile;
     }
 }
