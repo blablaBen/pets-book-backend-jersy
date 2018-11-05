@@ -1,5 +1,6 @@
 package com.app.server.http;
 
+import com.app.server.http.exceptions.APPExceptionInfo;
 import com.app.server.http.utils.APPResponse;
 import com.app.server.http.utils.PATCH;
 import com.app.server.services.MessagingService;
@@ -24,6 +25,12 @@ public class MessagingHttpService {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public APPResponse getAllChatRooms(@QueryParam("userId") String userId, @QueryParam("userType") String userType) {
+        if(userId == null || userType == null) {
+            APPResponse errorResponse = new APPResponse();
+            errorResponse.success = false;
+            errorResponse.data = "userId and userType are required";
+            return errorResponse;
+        }
         return new APPResponse(service.getAllChatRooms(userId, Integer.parseInt(userType)));
     }
 
