@@ -61,4 +61,41 @@ public class UserService {
         return new APPResponse(userInterface.getByEmail(email) != null);
     }
 
+
+    //create a pet
+    @POST
+    @Path("{userId}/pets")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public APPResponse postPet(Object obj) {
+        return new APPResponse(userInterface.createPetProfile(obj).getId());
+    }
+
+    //Getting all pets.
+    @GET
+    @Path("{userId}/pets")
+    @Produces({MediaType.APPLICATION_JSON})
+    public APPResponse getAllPets(@PathParam("userId") String userId) {
+        return new APPResponse(userInterface.getAllPets(userId));
+    }
+
+
+    // Editing a pet detail and portraiUrl
+    @PATCH
+    @Path("{userId}/pets/{petId}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public APPResponse updatePetInfo(@PathParam("petId") String petId, @PathParam("userId") String userId,  Object request) {
+        return new APPResponse(userInterface.updatePetProfile(petId,userId, request));
+    }
+
+    // Deleting a pet
+    @DELETE
+    @Path("{userId}/pets/{petId}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public APPResponse deletePet(@PathParam("petId") String petId, @PathParam("userId") String userId) {
+        return new APPResponse(userInterface.deletePetProfile(petId, userId));
+    }
+
 }

@@ -176,7 +176,7 @@ public class UserInterface {
             json = new JSONObject(ow.writeValueAsString(obj));
             PetProfile pet = convertJsonToPetProfile(json);
             Document doc = convertPetProfileToDocument(pet);
-            collection.insertOne(doc);
+            petProfileCollection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
             pet.setId(id.toString());
             return pet;
@@ -185,6 +185,47 @@ public class UserInterface {
             return null;
         }
 
+    }
+
+    public Object updatePetProfile(String id, String ownerUserId, Object request) {
+        try {
+
+            JSONObject json = null;
+            json = new JSONObject(ow.writeValueAsString(request));
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+            query.put("ownerUserId", ownerUserId);
+
+            Document doc = new Document();
+            if (json.has("description"))
+                doc.append("description", json.getString("description"));
+            if (json.has("portraitUrl"))
+                doc.append("portraitUrl", json.getString("portraitUrl"));
+
+
+            Document set = new Document("$set", doc);
+            petProfileCollection.updateOne(query, set);
+            return request;
+        } catch (JSONException e) {
+            System.out.println("Failed to update a document");
+            return null;
+
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to update a document");
+            return null;
+        }
+
+    }
+
+    public Object deletePetProfile(String id, String ownerUserId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", new ObjectId(id));
+        query.put("ownerUserId", ownerUserId);
+
+        petProfileCollection.deleteOne(query);
+
+        return new JSONObject();
     }
 
     private Document convertUserToDocument(User user) {
