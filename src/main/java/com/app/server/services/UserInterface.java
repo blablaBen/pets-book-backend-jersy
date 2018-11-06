@@ -28,6 +28,7 @@ public class UserInterface {
 
     public UserInterface() {
         this.collection = MongoPool.getInstance().getCollection("user");
+        this.petProfileCollection = MongoPool.getInstance().getCollection("pet_profile");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     }

@@ -83,7 +83,7 @@ public class MessagingService {
         ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 
         BasicDBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(chatRoomId));
+        query.put("chatRoomId", chatRoomId);
 
         FindIterable<Document> results = chatMessageCollection.find(query);
         if (results == null) {
