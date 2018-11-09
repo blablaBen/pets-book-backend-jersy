@@ -1,6 +1,8 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPUnauthorizedException;
+import com.app.server.util.APPCrypt;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -12,7 +14,9 @@ import org.bson.types.ObjectId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FollowInterface {
 
@@ -32,32 +36,41 @@ public class FollowInterface {
         return self;
     }
 
-    public ArrayList<String> getAll(String userId, int type) {
+    public ArrayList<String> getAll(HttpHeaders headers, String userId, int type) {
+        try {
+            checkAuthentication(headers, userId);
+            BasicDBObject query = new BasicDBObject();
+            query.put("userId", userId);
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("userId", userId);
+            ArrayList<String> follows = new ArrayList<String>();
 
-        ArrayList<String> follows = new ArrayList<String>();
-
-        FindIterable<Document> results = collection.find(query);
-        if (results == null) {
-            return follows;
-        }
-
-
-        for (Document item : results) {
-            if (type == 1) {
-                follows.addAll((ArrayList<String>) item.get("following"));
-            } else {
-                follows.addAll((ArrayList<String>) item.get("followed"));
+            FindIterable<Document> results = collection.find(query);
+            if (results == null) {
+                return follows;
             }
+
+
+            for (Document item : results) {
+                if (type == 1) {
+                    follows.addAll((ArrayList<String>) item.get("following"));
+                } else {
+                    follows.addAll((ArrayList<String>) item.get("followed"));
+                }
+            }
+            return follows;
+
+        } catch (APPUnauthorizedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return follows;
+        return null;
     }
 
 
-    public boolean addFollow(String userId, Object request) {
+    public boolean addFollow(HttpHeaders headers, String userId, Object request) {
         try {
+            checkAuthentication(headers, userId);
 
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
@@ -126,7 +139,7 @@ public class FollowInterface {
     }
 
 
-    public Object update(String id, JSONObject obj) {
+    public Object update(HttpHeaders headers, String id, JSONObject obj) {
         try {
 
             BasicDBObject query = new BasicDBObject();
@@ -161,9 +174,9 @@ public class FollowInterface {
     }
 
 
-    public void deleteFollowing(String userId, String followId) {
+    public void deleteFollowing(HttpHeaders headers, String userId, String followId) {
         try {
-
+            checkAuthentication(headers, userId);
             BasicDBObject query = new BasicDBObject();
             query.put("userId", userId);
 
@@ -219,6 +232,17 @@ public class FollowInterface {
         } catch (Exception e) {
             System.out.println("Failed to delete a follower");
 
+        }
+    }
+
+    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
+        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeaders == null)
+            throw new APPUnauthorizedException(70, "No Authorization Headers");
+        String token = authHeaders.get(0);
+        String clearToken = APPCrypt.decrypt(token);
+        if (id.compareTo(clearToken) != 0) {
+            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
         }
     }
 }

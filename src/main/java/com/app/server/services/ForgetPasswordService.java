@@ -111,8 +111,7 @@ public class ForgetPasswordService {
             User user = userInterface.getByEmail(json.getString("email"));
             if (user == null) return false;
 
-            userInterface.update(user.getId(), request);
-
+            userInterface.updatePassword(user.getId(), request);
             return true;
         } catch (Exception e) {
             System.out.println("Failed to create a forget password");

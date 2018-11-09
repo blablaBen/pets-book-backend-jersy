@@ -6,14 +6,16 @@ import com.app.server.http.utils.PATCH;
 import com.app.server.services.UserInterface;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 @Path("user")
-public class UserService {
+public class UserHttpService {
 
     UserInterface userInterface;
 
-    public UserService() {
+    public UserHttpService() {
         this.userInterface = UserInterface.getInstance();
     }
 
@@ -43,9 +45,9 @@ public class UserService {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse updateUserInfo(@PathParam("id") String id, Object request) {
+    public APPResponse updateUserInfo(@Context HttpHeaders headers, @PathParam("id") String id, Object request) {
 
-        return new APPResponse(userInterface.update(id, request));
+        return new APPResponse(userInterface.update(headers, id, request));
 
     }
 

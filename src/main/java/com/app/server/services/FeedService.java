@@ -16,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,8 +229,6 @@ public class FeedService {
         post.setId(item.getObjectId("_id").toString());
         return post;
     }
-
-
 
 
 }

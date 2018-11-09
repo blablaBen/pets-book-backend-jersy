@@ -1,8 +1,10 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PetProfile;
 import com.app.server.models.User;
+import com.app.server.util.APPCrypt;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +17,9 @@ import org.bson.types.ObjectId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserInterface {
@@ -102,14 +106,18 @@ public class UserInterface {
         } catch (JsonProcessingException e) {
             System.out.println("Failed to create a document");
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
     }
 
 
-    public Object update(String id, Object request) {
+    public Object update(HttpHeaders headers, String id, Object request) {
         try {
 
+            checkAuthentication(headers, id);
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
 
@@ -122,7 +130,7 @@ public class UserInterface {
             if (json.has("email"))
                 doc.append("email", json.getString("email"));
             if (json.has("password"))
-                doc.append("password", json.getString("password"));
+                doc.append("password", APPCrypt.md5(json.getString("password")));
             if (json.has("profileName"))
                 doc.append("profileName", json.getString("profileName"));
             if (json.has("userType"))
@@ -138,12 +146,39 @@ public class UserInterface {
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
             return request;
-        } catch (JSONException e) {
-            System.out.println("Failed to update a document");
-            return null;
-
         } catch (JsonProcessingException e) {
             System.out.println("Failed to update a document");
+            return null;
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public Object updatePassword(String id, Object request) {
+        try {
+            JSONObject json = null;
+            json = new JSONObject(ow.writeValueAsString(request));
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+
+            Document doc = new Document();
+            if (json.has("password"))
+                doc.append("password", APPCrypt.md5(json.getString("password")));
+
+            Document set = new Document("$set", doc);
+            collection.updateOne(query, set);
+            return request;
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to update a document");
+            return null;
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
             return null;
         }
 
@@ -278,11 +313,12 @@ public class UserInterface {
         return profile;
     }
 
-    private User convertJsonToUser(JSONObject json) {
+    private User convertJsonToUser(JSONObject json) throws Exception {
+
         User user = new User(
                 json.getString("email"),
                 json.getString("email"),
-                json.getString("password"),
+                APPCrypt.md5(json.getString("password")),
                 json.getString("profileName"),
                 json.getInt("userType"),
                 json.getInt("userLevel"),
@@ -296,5 +332,16 @@ public class UserInterface {
     private PetProfile convertJsonToPetProfile(JSONObject json) {
        PetProfile profile = new PetProfile(json.getString("ownerUserId"), json.getString("description"), json.getString("portraitUrl"));
        return profile;
+    }
+
+    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
+        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeaders == null)
+            throw new APPUnauthorizedException(70, "No Authorization Headers");
+        String token = authHeaders.get(0);
+        String clearToken = APPCrypt.decrypt(token);
+        if (id.compareTo(clearToken) != 0) {
+            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
+        }
     }
 }

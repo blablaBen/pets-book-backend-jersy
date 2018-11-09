@@ -3,6 +3,7 @@ package com.app.server.util;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import java.security.MessageDigest;
 import java.util.Base64;
 
 public class APPCrypt {
@@ -60,6 +61,24 @@ public class APPCrypt {
      */
     private static Key generateKey() throws Exception {
         return new SecretKeySpec(keyValue, ALGO);
+    }
+
+    /**
+     * MD5 password
+     */
+    public static String md5(String original) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(original.getBytes());
+        byte[] digest = md.digest();
+        // Note here that I use a StringBuilder instead of a StringBuffer
+        // as it is not meant to be shared so no need to use a thread safe
+        // builder of String
+        StringBuilder sb = new StringBuilder(32);
+        for (byte b : digest) {
+            sb.append(String.format("%02x", b & 0xff));
+        }
+        // Returns the result
+        return sb.toString();
     }
 
 }

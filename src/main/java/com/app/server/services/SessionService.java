@@ -5,6 +5,7 @@ import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPNotFoundException;
 import com.app.server.models.Session;
 import com.app.server.models.User;
+import com.app.server.util.APPCrypt;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,8 +50,8 @@ public class SessionService {
             BasicDBObject query = new BasicDBObject();
 
             query.put("email", json.getString("email"));
-            //query.put("password", APPCrypt.encrypt(json.getString("password")));
-            query.put("password", json.getString("password"));
+            query.put("password", APPCrypt.md5(json.getString("password")));
+            //query.put("password", json.getString("password"));
 
             Document item = userCollection.find(query).first();
             if (item == null) {

@@ -6,6 +6,8 @@ import com.app.server.services.FollowInterface;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
@@ -21,9 +23,9 @@ public class FollowService {
     //GET Follow - All
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse getFollow(@PathParam("userId") String userId, @QueryParam("type") @NotNull Integer type, @QueryParam("justCount") boolean justCount) {
+    public APPResponse getFollow(@Context HttpHeaders headers, @PathParam("userId") String userId, @QueryParam("type") @NotNull Integer type, @QueryParam("justCount") boolean justCount) {
         ArrayList<String> follows = new ArrayList<>();
-        follows = followInterface.getAll(userId, type);
+        follows = followInterface.getAll(headers, userId, type);
         return new APPResponse((follows));
     }
 
@@ -32,8 +34,8 @@ public class FollowService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse addFollow(@PathParam("userId") String userId, Object request) {
-        followInterface.addFollow(userId, request);
+    public APPResponse addFollow(@Context HttpHeaders headers, @PathParam("userId") String userId, Object request) {
+        followInterface.addFollow(headers, userId, request);
         return new APPResponse();
 
     }
@@ -43,9 +45,9 @@ public class FollowService {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Object deleteFollowing(@PathParam("userId") String userId, @PathParam("id") String id) {
+    public Object deleteFollowing(@Context HttpHeaders headers, @PathParam("userId") String userId, @PathParam("id") String id) {
 
-        followInterface.deleteFollowing(userId, id);
+        followInterface.deleteFollowing(headers, userId, id);
         return "success";
 
     }
