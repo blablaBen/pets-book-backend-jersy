@@ -5,6 +5,7 @@ import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PetProfile;
 import com.app.server.models.User;
 import com.app.server.util.APPCrypt;
+import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +20,6 @@ import org.json.JSONObject;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserInterface {
@@ -117,7 +117,7 @@ public class UserInterface {
     public Object update(HttpHeaders headers, String id, Object request) {
         try {
 
-            checkAuthentication(headers, id);
+            CheckAuthentication.check(headers, id);
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
 
@@ -149,6 +149,8 @@ public class UserInterface {
         } catch (JsonProcessingException e) {
             System.out.println("Failed to update a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
             System.out.println("Failed to update a document");
             e.printStackTrace();
@@ -334,7 +336,7 @@ public class UserInterface {
        return profile;
     }
 
-    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
+    /*void checkAuthentication(HttpHeaders headers, String id) throws Exception {
         List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
         if (authHeaders == null)
             throw new APPUnauthorizedException(70, "No Authorization Headers");
@@ -343,5 +345,5 @@ public class UserInterface {
         if (id.compareTo(clearToken) != 0) {
             throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
         }
-    }
+    }*/
 }

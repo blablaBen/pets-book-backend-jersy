@@ -1,8 +1,9 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
-import com.app.server.util.APPCrypt;
+import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -16,7 +17,6 @@ import org.json.JSONObject;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FollowInterface {
 
@@ -38,7 +38,7 @@ public class FollowInterface {
 
     public ArrayList<String> getAll(HttpHeaders headers, String userId, int type) {
         try {
-            checkAuthentication(headers, userId);
+            CheckAuthentication.check(headers, userId);
             BasicDBObject query = new BasicDBObject();
             query.put("userId", userId);
 
@@ -48,8 +48,6 @@ public class FollowInterface {
             if (results == null) {
                 return follows;
             }
-
-
             for (Document item : results) {
                 if (type == 1) {
                     follows.addAll((ArrayList<String>) item.get("following"));
@@ -59,18 +57,20 @@ public class FollowInterface {
             }
             return follows;
 
-        } catch (APPUnauthorizedException e) {
-            e.printStackTrace();
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
+            System.out.println("EXCEPTION!!!!");
             e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
-        return null;
+
     }
 
 
     public boolean addFollow(HttpHeaders headers, String userId, Object request) {
         try {
-            checkAuthentication(headers, userId);
+            CheckAuthentication.check(headers, userId);
 
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
@@ -99,6 +99,8 @@ public class FollowInterface {
 
             addFollower(followId, userId);
             return true;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
             System.out.println("Failed to create a document");
             return false;
@@ -176,7 +178,7 @@ public class FollowInterface {
 
     public void deleteFollowing(HttpHeaders headers, String userId, String followId) {
         try {
-            checkAuthentication(headers, userId);
+            CheckAuthentication.check(headers, userId);
             BasicDBObject query = new BasicDBObject();
             query.put("userId", userId);
 
@@ -199,6 +201,8 @@ public class FollowInterface {
             collection.updateOne(update, set);
 
             deleteFollower(followId, userId);
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
             System.out.println("Failed to delete a following");
 
@@ -235,14 +239,14 @@ public class FollowInterface {
         }
     }
 
-    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
-        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeaders == null)
-            throw new APPUnauthorizedException(70, "No Authorization Headers");
-        String token = authHeaders.get(0);
-        String clearToken = APPCrypt.decrypt(token);
-        if (id.compareTo(clearToken) != 0) {
-            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
-        }
-    }
+//    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
+//        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
+//        if (authHeaders == null)
+//            throw new APPUnauthorizedException(70, "No Authorization Headers");
+//        String token = authHeaders.get(0);
+//        String clearToken = APPCrypt.decrypt(token);
+//        if (id.compareTo(clearToken) != 0) {
+//            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
+//        }
+//    }
 }
