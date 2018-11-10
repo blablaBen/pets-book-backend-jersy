@@ -1,6 +1,7 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PetProfile;
 import com.app.server.models.User;
@@ -196,29 +197,41 @@ public class UserInterface {
         return new JSONObject();
     }
 
-    public ArrayList<PetProfile> getAllPets(String ownerUserId) {
-        ArrayList<PetProfile> pets = new ArrayList<PetProfile>();
+    public ArrayList<PetProfile> getAllPets(HttpHeaders headers, String ownerUserId) {
+        try {
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("ownerUserId", ownerUserId);
+            CheckAuthentication.check(headers, ownerUserId);
+            ArrayList<PetProfile> pets = new ArrayList<PetProfile>();
 
-        FindIterable<Document> results = petProfileCollection.find(query);
-        if (results == null) {
+            BasicDBObject query = new BasicDBObject();
+            query.put("ownerUserId", ownerUserId);
+
+            FindIterable<Document> results = petProfileCollection.find(query);
+            if (results == null) {
+                return pets;
+            }
+            for (Document item : results) {
+                PetProfile pet = convertDocumentToPetProfile(item);
+                pets.add(pet);
+            }
             return pets;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            return null;
         }
-        for (Document item : results) {
-            PetProfile pet = convertDocumentToPetProfile(item);
-            pets.add(pet);
-        }
-        return pets;
     }
 
-    public PetProfile createPetProfile(Object obj) {
-
+    public PetProfile createPetProfile(HttpHeaders headers, Object obj) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
             PetProfile pet = convertJsonToPetProfile(json);
+
+            CheckAuthentication.check(headers, pet.getOwnerUserId());
+
             Document doc = convertPetProfileToDocument(pet);
             petProfileCollection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
@@ -227,12 +240,20 @@ public class UserInterface {
         } catch (JsonProcessingException e) {
             System.out.println("Failed to create a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            return null;
         }
 
     }
 
-    public Object updatePetProfile(String id, String ownerUserId, Object request) {
+    public Object updatePetProfile(HttpHeaders headers, String id, String ownerUserId, Object request) {
         try {
+
+            CheckAuthentication.check(headers, ownerUserId);
 
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
@@ -258,18 +279,34 @@ public class UserInterface {
         } catch (JsonProcessingException e) {
             System.out.println("Failed to update a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            return null;
         }
 
     }
 
-    public Object deletePetProfile(String id, String ownerUserId) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(id));
-        query.put("ownerUserId", ownerUserId);
+    public Object deletePetProfile(HttpHeaders headers, String id, String ownerUserId) {
+        try {
+            CheckAuthentication.check(headers, ownerUserId);
 
-        petProfileCollection.deleteOne(query);
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+            query.put("ownerUserId", ownerUserId);
 
-        return new JSONObject();
+            petProfileCollection.deleteOne(query);
+
+            return new JSONObject();
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
     }
 
     private Document convertUserToDocument(User user) {

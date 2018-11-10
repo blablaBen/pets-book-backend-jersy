@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 @Path("notification")
@@ -26,13 +28,13 @@ public class NotificationHttpService {
     //Getting all notification.
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse getAllChatRooms(@QueryParam("userId") String userId) {
+    public APPResponse getAllChatRooms(@Context HttpHeaders headers, @QueryParam("userId") String userId) {
         if(userId == null ) {
             APPResponse errorResponse = new APPResponse();
             errorResponse.success = false;
             errorResponse.data = "userId is required";
             return errorResponse;
         }
-        return new APPResponse(service.getAllNotification(userId));
+        return new APPResponse(service.getAllNotification(headers, userId));
     }
 }

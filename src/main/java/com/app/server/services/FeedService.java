@@ -1,7 +1,10 @@
 package com.app.server.services;
 
+import com.app.server.http.exceptions.APPInternalServerException;
+import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PostComment;
 import com.app.server.models.PostStatus;
+import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,51 +42,80 @@ public class FeedService {
         return self;
     }
 
-    public PostStatus getOne(String id) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(id));
-        Document item = postedStatusCollection.find(query).first();
+    public PostStatus getOne(HttpHeaders headers, String id, String userId) {
+        try {
+            CheckAuthentication.check(headers, userId);
 
-        if (item == null) {
-            return  null;
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+            Document item = postedStatusCollection.find(query).first();
+
+            if (item == null) {
+                return null;
+            }
+
+            PostStatus status = convertDocumentToPostedStatus(item);
+            return status;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
-
-        PostStatus status = convertDocumentToPostedStatus(item);
-        return status;
     }
 
-    public ArrayList<PostStatus> getAll() {
+    public ArrayList<PostStatus> getAll(HttpHeaders headers, String userId) {
+        try {
+            CheckAuthentication.check(headers, userId);
+            ArrayList<PostStatus> postList = new ArrayList<PostStatus>();
 
-        ArrayList<PostStatus> postList = new ArrayList<PostStatus>();
-
-        FindIterable<Document> results = postedStatusCollection.find();
-        if (results == null) {
-            return  postList;
+            FindIterable<Document> results = postedStatusCollection.find();
+            if (results == null) {
+                return  postList;
+            }
+            for (Document item : results) {
+                PostStatus post = convertDocumentToPostedStatus(item);
+                postList.add(post);
+            }
+            return postList;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
-        for (Document item : results) {
-            PostStatus post = convertDocumentToPostedStatus(item);
-            postList.add(post);
-        }
-        return postList;
     }
 
-    public Object create(Object request) {
+    public Object create(HttpHeaders headers, Object request) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
             PostStatus status = this.convertJsonToPostStatus(json);
+
+            CheckAuthentication.check(headers, status.getUserId());
+
             postedStatusCollection.insertOne(convertPostStatusToDocument(status));
             return status;
         } catch(JsonProcessingException e) {
             System.out.println("Failed to create a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
     }
 
-    public Object update(String id, Object request) {
+    public Object update(HttpHeaders headers, String id, Object request) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
+
+            CheckAuthentication.check(headers, json.getString("userId"));
 
             BasicDBObject query = new BasicDBObject();
             query.put("_id", new ObjectId(id));
@@ -111,22 +144,34 @@ public class FeedService {
             System.out.println("Failed to update a document");
             return null;
 
-
-        }
-        catch(JsonProcessingException e) {
+        } catch(JsonProcessingException e) {
             System.out.println("Failed to create a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
     }
 
 
     public Object delete(String id) {
-        BasicDBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(id));
+        try {
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
 
-        postedStatusCollection.deleteOne(query);
+            postedStatusCollection.deleteOne(query);
 
-        return new JSONObject();
+            return new JSONObject();
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
     }
 
     private Document convertPostStatusToDocument(PostStatus status) {
@@ -175,26 +220,59 @@ public class FeedService {
         return status;
     }
 
-    public Object createComment(String postId, Object request) {
+    public Object createComment(HttpHeaders headers, String postId, Object request) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(request));
             PostComment comment = this.convertJsonToPostComment(postId, json);
+
+            CheckAuthentication.check(headers, comment.getUserId());
+
             commentCollection.insertOne(convertPostCommentToDocument(comment));
             return comment;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
     }
 
-    public Object deleteComment(String commentId) {
+    public Object deleteComment(HttpHeaders headers, String commentId) {
+        try {
+            PostComment comment = getComment(commentId);
+            CheckAuthentication.check(headers, comment.getUserId());
+
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(commentId));
+
+            commentCollection.deleteOne(query);
+
+            return new JSONObject();
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
+    }
+
+    private PostComment getComment(String commentId) {
         BasicDBObject query = new BasicDBObject();
         query.put("_id", new ObjectId(commentId));
+        Document item = commentCollection.find(query).first();
 
-        commentCollection.deleteOne(query);
+        if (item == null) {
+            return null;
+        }
 
-        return new JSONObject();
+        PostComment comment = convertDocumentToPostComment(item);
+        return comment;
     }
 
     public ArrayList<PostComment> getAllComments(String postId) {

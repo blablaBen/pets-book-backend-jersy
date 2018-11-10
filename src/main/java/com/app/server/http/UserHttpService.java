@@ -73,16 +73,16 @@ public class UserHttpService {
     @Path("{userId}/pets")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse postPet(Object obj) {
-        return new APPResponse(userInterface.createPetProfile(obj).getId());
+    public APPResponse postPet(@Context HttpHeaders headers, Object obj) {
+        return new APPResponse(userInterface.createPetProfile(headers, obj).getId());
     }
 
     //Getting all pets.
     @GET
     @Path("{userId}/pets")
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse getAllPets(@PathParam("userId") String userId) {
-        return new APPResponse(userInterface.getAllPets(userId));
+    public APPResponse getAllPets(@Context HttpHeaders headers, @PathParam("userId") String userId) {
+        return new APPResponse(userInterface.getAllPets(headers, userId));
     }
 
 
@@ -91,8 +91,8 @@ public class UserHttpService {
     @Path("{userId}/pets/{petId}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse updatePetInfo(@PathParam("petId") String petId, @PathParam("userId") String userId,  Object request) {
-        return new APPResponse(userInterface.updatePetProfile(petId,userId, request));
+    public APPResponse updatePetInfo(@Context HttpHeaders headers,@PathParam("petId") String petId, @PathParam("userId") String userId,  Object request) {
+        return new APPResponse(userInterface.updatePetProfile(headers, petId,userId, request));
     }
 
     // Deleting a pet
@@ -100,8 +100,8 @@ public class UserHttpService {
     @Path("{userId}/pets/{petId}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse deletePet(@PathParam("petId") String petId, @PathParam("userId") String userId) {
-        return new APPResponse(userInterface.deletePetProfile(petId, userId));
+    public APPResponse deletePet(@Context HttpHeaders headers, @PathParam("petId") String petId, @PathParam("userId") String userId) {
+        return new APPResponse(userInterface.deletePetProfile(headers, petId, userId));
     }
 
 }

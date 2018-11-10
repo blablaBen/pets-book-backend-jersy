@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -34,33 +36,33 @@ public class FeedHttpService {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse getAll() {
+    public APPResponse getAll(@Context HttpHeaders headers, @QueryParam("userId") String userId) {
 
-        return new APPResponse(service.getAll());
+        return new APPResponse(service.getAll(headers, userId));
     }
 
     @GET
     @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse getOne(@PathParam("id") String id) {
+    public APPResponse getOne(@PathParam("id") String id, @Context HttpHeaders headers, @QueryParam("userId") String userId) {
 
-        return new APPResponse(service.getOne(id));
+        return new APPResponse(service.getOne(headers,id, userId));
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON})
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse create(Object request) {
-        return new APPResponse(service.create(request));
+    public APPResponse create(@Context HttpHeaders headers,Object request) {
+        return new APPResponse(service.create(headers,request));
     }
 
     @PATCH
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse update(@PathParam("id") String id, Object request){
+    public APPResponse update(@Context HttpHeaders headers, @PathParam("id") String id, Object request){
 
-        return new APPResponse(service.update(id,request));
+        return new APPResponse(service.update(headers, id,request));
 
     }
 
@@ -85,15 +87,15 @@ public class FeedHttpService {
     @Path("{postId}/comments")
     @Consumes({ MediaType.APPLICATION_JSON})
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse createComment(@PathParam("postId") String postId, Object request) {
-        return new APPResponse(service.createComment(postId, request));
+    public APPResponse createComment(@Context HttpHeaders headers,@PathParam("postId") String postId, Object request) {
+        return new APPResponse(service.createComment(headers, postId, request));
     }
 
     @DELETE
     @Path("{postId}/comments/{commentId}")
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse  deleteComment(@PathParam("commentId") String commentId) {
-        return new APPResponse(service.deleteComment(commentId));
+    public APPResponse  deleteComment(@Context HttpHeaders headers,@PathParam("commentId") String commentId) {
+        return new APPResponse(service.deleteComment(headers, commentId));
     }
 
 }

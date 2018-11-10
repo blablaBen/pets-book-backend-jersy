@@ -1,9 +1,12 @@
 package com.app.server.services;
 
 import com.app.server.enumeration.UserType;
+import com.app.server.http.exceptions.APPInternalServerException;
+import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.ChatMessage;
 import com.app.server.models.ChatRoom;
 import com.app.server.models.User;
+import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +18,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,32 +40,41 @@ public class MessagingService {
         return self;
     }
 
-    public ArrayList<ChatRoom> getAllChatRooms(String userId, Integer userType) {
-        ArrayList<ChatRoom> rooms = new ArrayList<ChatRoom>();
-        BasicDBObject query = new BasicDBObject();
+    public ArrayList<ChatRoom> getAllChatRooms(HttpHeaders headers, String userId, Integer userType) {
+        try {
+            CheckAuthentication.check(headers, userId);
+            ArrayList<ChatRoom> rooms = new ArrayList<ChatRoom>();
+            BasicDBObject query = new BasicDBObject();
 
-        if (userType == UserType.PET_OWNER.getValue()) {
-            query.put("petOwnerUserId", userId);
-        } else {
-            query.put("vetUserId", userId);
-        }
+            if (userType == UserType.PET_OWNER.getValue()) {
+                query.put("petOwnerUserId", userId);
+            } else {
+                query.put("vetUserId", userId);
+            }
 
-        FindIterable<Document> results = chatRoomCollection.find(query);
-        if (results == null) {
+            FindIterable<Document> results = chatRoomCollection.find(query);
+            if (results == null) {
+                return rooms;
+            }
+
+            for (Document item : results) {
+                ChatRoom room = convertDocumentToChatRoom(item);
+                rooms.add(room);
+            }
+
             return rooms;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
-
-        for (Document item : results) {
-            ChatRoom room = convertDocumentToChatRoom(item);
-            rooms.add(room);
-        }
-
-        return rooms;
     }
 
 
     public ChatRoom createRoom(Object obj) {
-
+        // need authenthication verification
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
@@ -79,32 +92,59 @@ public class MessagingService {
 
     }
 
-    public ArrayList<ChatMessage> getAllChatMessage(String chatRoomId) {
-        ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
+    public ArrayList<ChatMessage> getAllChatMessage(HttpHeaders headers, String chatRoomId, Integer userType) {
+        try {
+            validateAuthenthication(headers, chatRoomId,userType);
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("chatRoomId", chatRoomId);
+            ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 
-        FindIterable<Document> results = chatMessageCollection.find(query);
-        if (results == null) {
+            BasicDBObject query = new BasicDBObject();
+            query.put("chatRoomId", chatRoomId);
+
+            FindIterable<Document> results = chatMessageCollection.find(query);
+            if (results == null) {
+                return messages;
+            }
+
+            for (Document item : results) {
+                ChatMessage message = convertDocumentToChatMessage(item);
+                messages.add(message);
+            }
+
             return messages;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
+    }
 
-        for (Document item : results) {
-            ChatMessage message = convertDocumentToChatMessage(item);
-            messages.add(message);
-        }
+    private boolean validateAuthenthication(HttpHeaders headers, String chatRoomId, Integer userType) throws Exception{
+        ChatRoom chatRoom = getChatRoomItem(chatRoomId);
+        String userId = (userType == UserType.PET_OWNER.getValue()) ? chatRoom.getPetOwnerUserId() : chatRoom.getVetUserId();
+        CheckAuthentication.check(headers, userId);
+        return  true;
+    }
 
-        return messages;
+    private ChatRoom getChatRoomItem(String chatRoomId) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("_id", new ObjectId(chatRoomId));
+
+        Document item = chatRoomCollection.find(query).first();
+        return convertDocumentToChatRoom(item);
     }
 
 
-    public ChatMessage createMessage(String chatRoomId, Object obj) {
-
+    public ChatMessage createMessage(HttpHeaders headers, Object obj) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
             ChatMessage message = convertJsonToChatMessage(json);
+
+            CheckAuthentication.check(headers, message.getUserId());
+
             Document doc = convertChatMessageToDocument(message);
             chatMessageCollection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
@@ -114,6 +154,12 @@ public class MessagingService {
         } catch (JsonProcessingException e) {
             System.out.println("Failed to create a document");
             return null;
+        } catch (APPUnauthorizedException a) {
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
 
     }
