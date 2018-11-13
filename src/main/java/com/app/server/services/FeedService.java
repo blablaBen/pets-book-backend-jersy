@@ -42,9 +42,9 @@ public class FeedService {
         return self;
     }
 
-    public PostStatus getOne(HttpHeaders headers, String id, String userId) {
+    public PostStatus getOne(HttpHeaders headers, String id) {
         try {
-            CheckAuthentication.check(headers, userId);
+            CheckAuthentication.onlyCheckAuthenthicationProvided(headers);
 
             BasicDBObject query = new BasicDBObject();
             query.put("_id", new ObjectId(id));
@@ -65,9 +65,9 @@ public class FeedService {
         }
     }
 
-    public ArrayList<PostStatus> getAll(HttpHeaders headers, String userId) {
+    public ArrayList<PostStatus> getAll(HttpHeaders headers) {
         try {
-            CheckAuthentication.check(headers, userId);
+            CheckAuthentication.onlyCheckAuthenthicationProvided(headers);
             ArrayList<PostStatus> postList = new ArrayList<PostStatus>();
 
             FindIterable<Document> results = postedStatusCollection.find();

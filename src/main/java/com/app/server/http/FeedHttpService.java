@@ -36,17 +36,17 @@ public class FeedHttpService {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse getAll(@Context HttpHeaders headers, @QueryParam("userId") String userId) {
+    public APPResponse getAll(@Context HttpHeaders headers) {
 
-        return new APPResponse(service.getAll(headers, userId));
+        return new APPResponse(service.getAll(headers));
     }
 
     @GET
     @Path("{id}")
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse getOne(@PathParam("id") String id, @Context HttpHeaders headers, @QueryParam("userId") String userId) {
+    public APPResponse getOne(@PathParam("id") String id, @Context HttpHeaders headers) {
 
-        return new APPResponse(service.getOne(headers,id, userId));
+        return new APPResponse(service.getOne(headers,id));
     }
 
     @POST

@@ -17,4 +17,10 @@ public class CheckAuthentication {
             throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
         }
     }
+
+    static public void onlyCheckAuthenthicationProvided(HttpHeaders headers) throws Exception {
+        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeaders == null)
+            throw new APPUnauthorizedException(70, "No Authorization Headers");
+    }
 }
