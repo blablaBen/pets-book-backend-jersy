@@ -41,16 +41,17 @@ public class MessagingHttpService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse createChat(Object request) {
-        return new APPResponse(service.createRoom(request));
+    public APPResponse createChat(Object request, @Context HttpHeaders headers) {
+        return new APPResponse(service.createRoom(headers, request));
     }
 
     //Getting all message in a chat room.
     @GET
     @Path("{roomId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse getAllChatMessage(@Context HttpHeaders headers, @PathParam("roomId") String roomId, @QueryParam("userType") String userType) {
-        return new APPResponse(service.getAllChatMessage(headers, roomId, Integer.parseInt(userType)));
+    public APPResponse getAllChatMessage(@Context HttpHeaders headers, @PathParam("roomId") String roomId, @QueryParam("userType") String userType, @QueryParam("pageSize") String pageSize
+            , @QueryParam("page") String page) {
+        return new APPResponse(service.getAllChatMessage(headers, roomId, userType, pageSize, page));
     }
 
     //Post a message in a chat room.

@@ -1,6 +1,7 @@
 package com.app.server.services;
 
 import com.app.server.enumeration.UserType;
+import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.ChatMessage;
@@ -64,18 +65,20 @@ public class MessagingService {
 
             return rooms;
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
     }
 
 
-    public ChatRoom createRoom(Object obj) {
-        // need authenthication verification
+    public ChatRoom createRoom(HttpHeaders headers, Object obj) {
+
         try {
+            CheckAuthentication.onlyCheckAuthenthicationProvided(headers);
+
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
             ChatRoom room = convertJsonToChatRoom(json);
@@ -86,22 +89,37 @@ public class MessagingService {
 
             return room;
         } catch (JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
+            throw new APPBadRequestException(55, "Json is invalid");
+        } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
 
     }
 
-    public ArrayList<ChatMessage> getAllChatMessage(HttpHeaders headers, String chatRoomId, Integer userType) {
+    public ArrayList<ChatMessage> getAllChatMessage(HttpHeaders headers, String chatRoomId, String userType, String pageSizeStr, String pageStr) {
         try {
-            validateAuthenthication(headers, chatRoomId,userType);
+            if(userType == null) {
+                throw new APPBadRequestException(55, "UserType is required");
+            }
+
+            validateAuthenthication(headers, chatRoomId, Integer.parseInt(userType));
 
             ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 
             BasicDBObject query = new BasicDBObject();
             query.put("chatRoomId", chatRoomId);
 
-            FindIterable<Document> results = chatMessageCollection.find(query);
+            //Filter By Page
+            if (pageSizeStr == null || pageStr == null) {
+                throw new APPBadRequestException(55, "Missing page and pageSize");
+            }
+            int skipPage = Integer.parseInt(pageStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
+            FindIterable<Document> results = chatMessageCollection.find(query).sort(new BasicDBObject("time", 1)).skip(skipPage).limit(pageSize);
             if (results == null) {
                 return messages;
             }
@@ -113,9 +131,12 @@ public class MessagingService {
 
             return messages;
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (APPBadRequestException ab) {
+            ab.printStackTrace();
+            throw ab;
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -152,12 +173,12 @@ public class MessagingService {
 
             return message;
         } catch (JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
+            e.printStackTrace();
+            throw new APPBadRequestException(55, "Json is invalid:" + e.getMessage());
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
