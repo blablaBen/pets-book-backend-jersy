@@ -36,9 +36,10 @@ public class FeedHttpService {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON})
-    public APPResponse getAll(@Context HttpHeaders headers) {
+    public APPResponse getAll(@Context HttpHeaders headers, @QueryParam("pageSize") String pageSize
+            , @QueryParam("page") String page, @QueryParam("isShowOnlyInterest") boolean isShowOnlyInterest, @QueryParam("showOnlyUserId") String showOnlyUserId) {
 
-        return new APPResponse(service.getAll(headers));
+        return new APPResponse(service.getAll(headers, pageSize, page, showOnlyUserId));
     }
 
     @GET

@@ -1,5 +1,6 @@
 package com.app.server.services;
 
+import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PostComment;
@@ -65,12 +66,26 @@ public class FeedService {
         }
     }
 
-    public ArrayList<PostStatus> getAll(HttpHeaders headers) {
+    public ArrayList<PostStatus> getAll(HttpHeaders headers, String pageSizeStr, String pageStr, String showOnlyUserId) {
         try {
             CheckAuthentication.onlyCheckAuthenthicationProvided(headers);
             ArrayList<PostStatus> postList = new ArrayList<PostStatus>();
 
-            FindIterable<Document> results = postedStatusCollection.find();
+            //Filter By UserId
+            BasicDBObject query = new BasicDBObject();
+            if(showOnlyUserId != null) {
+                query.put("userId", showOnlyUserId);
+            }
+
+            //Filter By Page
+            if(pageSizeStr == null || pageStr == null) {
+                throw new APPBadRequestException(55, "missing page and pageSize");
+            }
+            int skipPage = Integer.parseInt(pageStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
+            FindIterable<Document> results = postedStatusCollection.find(query).skip(skipPage).limit(pageSize);
+
+
             if (results == null) {
                 return  postList;
             }
@@ -81,8 +96,9 @@ public class FeedService {
             return postList;
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch(APPBadRequestException ae) {
+            throw ae;
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
