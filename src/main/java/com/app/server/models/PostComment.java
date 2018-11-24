@@ -1,5 +1,7 @@
 package com.app.server.models;
 
+import java.util.Date;
+
 public class PostComment {
     public String getId() {
         return id;
@@ -21,12 +23,12 @@ public class PostComment {
         this.content = content;
     }
 
-    public String getTime() {
-        return time;
+    public Date getDate() {
+        return date;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getUserId() {
@@ -48,15 +50,15 @@ public class PostComment {
     String id=null;
     String postId;
     String content;
-    String time;
+    Date date;
     String userId;
     String username;
 
 
-    public PostComment(String postId, String content, String time, String userId) {
+    public PostComment(String postId, String content, Date time, String userId) {
         this.postId = postId;
         this.content = content;
-        this.time = time;
+        this.date = time;
         this.userId = userId;
     }
 

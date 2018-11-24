@@ -298,7 +298,7 @@ public class FeedService {
         BasicDBObject query = new BasicDBObject();
         query.put("postId", postId);
 
-        FindIterable<Document> items = commentCollection.find(query);
+        FindIterable<Document> items = commentCollection.find(query).sort(new BasicDBObject("date", 1));
         ArrayList<PostComment> result = new ArrayList();
         for(Document item : items) {
             result.add(convertDocumentToPostComment(item));
@@ -308,20 +308,20 @@ public class FeedService {
     }
 
     private PostComment convertJsonToPostComment(String postId, JSONObject item) {
-        PostComment status = new PostComment(postId, item.getString("content"), item.getString("time"), item.getString("userId") );
+        PostComment status = new PostComment(postId, item.getString("content"),new Date(), item.getString("userId") );
         return status;
     }
 
     private Document convertPostCommentToDocument(PostComment comment) {
         Document doc = new Document("postId", comment.getPostId())
                 .append("content", comment.getContent())
-                .append("time", comment.getTime())
+                .append("date", comment.getDate())
                 .append("userId", comment.getUserId());
         return doc;
     }
 
     private PostComment convertDocumentToPostComment(Document item) {
-        PostComment post = new PostComment(item.getString("postId"), item.getString("content"), item.getString("time"), item.getString("userId"));
+        PostComment post = new PostComment(item.getString("postId"), item.getString("content"), item.getDate("date"), item.getString("userId"));
         post.setId(item.getObjectId("_id").toString());
         return post;
     }
