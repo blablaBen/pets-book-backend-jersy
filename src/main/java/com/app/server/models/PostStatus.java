@@ -1,5 +1,6 @@
 package com.app.server.models;
 
+import java.util.Date;
 import java.util.List;
 
 public class PostStatus {
@@ -31,11 +32,11 @@ public class PostStatus {
         this.pictures = pictures;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -51,11 +52,11 @@ public class PostStatus {
     String userId;
     String textValue;
     List<String> pictures;
-    String date;
+    Date date;
     int commentCount;
 
 
-    public PostStatus(String userId, String textValue, List<String> pictures, String date) {
+    public PostStatus(String userId, String textValue, List<String> pictures, Date date) {
         this.userId = userId;
         this.textValue = textValue;
         this.pictures = pictures;

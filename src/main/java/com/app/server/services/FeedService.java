@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FeedService {
@@ -84,7 +85,7 @@ public class FeedService {
             }
             int skipPage = Integer.parseInt(pageStr);
             int pageSize = Integer.parseInt(pageSizeStr);
-            FindIterable<Document> results = postedStatusCollection.find(query).skip(skipPage).limit(pageSize);
+            FindIterable<Document> results = postedStatusCollection.find(query).sort(new BasicDBObject("date", 1)).skip(skipPage).limit(pageSize);
 
 
             if (results == null) {
@@ -217,8 +218,7 @@ public class FeedService {
 
         PostStatus status = new PostStatus(item.getString("userId"),
                 item.getString("textValue"),
-                picturesList,
-                item.getString("date"));
+                picturesList, item.getDate("date"));
         status.setCommentCount(item.getInteger("commentCount"));
         status.setId(item.getObjectId("_id").toString());
         return status;
@@ -234,7 +234,7 @@ public class FeedService {
         PostStatus status = new PostStatus(item.getString("userId"),
                 item.getString("textValue"),
                 pictures,
-                item.getString("date"));
+                new Date());
         return status;
     }
 
