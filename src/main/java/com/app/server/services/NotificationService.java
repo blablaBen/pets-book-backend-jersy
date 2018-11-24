@@ -1,5 +1,6 @@
 package com.app.server.services;
 
+import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.Notification;
@@ -34,7 +35,7 @@ public class NotificationService {
         return self;
     }
 
-    public ArrayList<Notification> getAllNotification(HttpHeaders headers, String userId) {
+    public ArrayList<Notification> getAllNotification(HttpHeaders headers, String userId, String pageStr, String pageSizeStr) {
         try {
             CheckAuthentication.check(headers, userId);
 
@@ -43,7 +44,13 @@ public class NotificationService {
             BasicDBObject query = new BasicDBObject();
             query.put("userId", userId);
 
-            FindIterable<Document> results = notificationCollection.find(query);
+            //Filter By Page
+            if(pageSizeStr == null || pageStr == null) {
+                throw new APPBadRequestException(55, "missing page and pageSize");
+            }
+            int skipPage = Integer.parseInt(pageStr);
+            int pageSize = Integer.parseInt(pageSizeStr);
+            FindIterable<Document> results = notificationCollection.find(query).sort(new BasicDBObject("date", 1)).skip(skipPage).limit(pageSize);
             if (results == null) {
                 return notifications;
             }
@@ -67,7 +74,8 @@ public class NotificationService {
                 item.getString("userId"),
                 item.getString("type"),
                 item.getString("content"),
-                item.getBoolean("isRead")
+                item.getBoolean("isRead"),
+                item.getDate("date")
         );
         notification.setId(item.getObjectId("_id").toString());
         return notification;

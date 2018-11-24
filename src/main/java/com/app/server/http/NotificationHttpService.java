@@ -27,14 +27,10 @@ public class NotificationHttpService {
 
     //Getting all notification.
     @GET
+    @Path("{userId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse getAllChatRooms(@Context HttpHeaders headers, @QueryParam("userId") String userId) {
-        if(userId == null ) {
-            APPResponse errorResponse = new APPResponse();
-            errorResponse.success = false;
-            errorResponse.data = "userId is required";
-            return errorResponse;
-        }
-        return new APPResponse(service.getAllNotification(headers, userId));
+    public APPResponse getAllChatRooms(@Context HttpHeaders headers, @PathParam("userId") String userId, @QueryParam("pageSize") String pageSize
+            , @QueryParam("page") String page) {
+        return new APPResponse(service.getAllNotification(headers, userId, page, pageSize));
     }
 }

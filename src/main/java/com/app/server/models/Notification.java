@@ -1,17 +1,21 @@
 package com.app.server.models;
 
+import java.util.Date;
+
 public class Notification {
     private String id = null;
     private String userId;
     private String type;
     private String content;
+    private Date date;
     private boolean isRead;
 
-    public Notification(String userId, String type, String content, boolean isRead) {
+    public Notification(String userId, String type, String content, boolean isRead, Date date) {
         this.userId = userId;
         this.type = type;
         this.content = content;
         this.isRead = isRead;
+        this.date = date;
     }
 
     public String getId() {
@@ -53,4 +57,14 @@ public class Notification {
     public void setRead(boolean read) {
         isRead = read;
     }
+
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 }
