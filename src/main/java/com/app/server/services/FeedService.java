@@ -58,6 +58,7 @@ public class FeedService {
             PostStatus status = convertDocumentToPostedStatus(item);
             return status;
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
             System.out.println("Failed to update a document");
@@ -95,8 +96,10 @@ public class FeedService {
             }
             return postList;
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch(APPBadRequestException ae) {
+            ae.printStackTrace();
             throw ae;
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,12 +118,12 @@ public class FeedService {
             postedStatusCollection.insertOne(convertPostStatusToDocument(status));
             return status;
         } catch(JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
+            e.printStackTrace();
+            throw new APPBadRequestException(55, "Json is invalid format");
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -156,17 +159,16 @@ public class FeedService {
             postedStatusCollection.updateOne(query,set);
             return request;
 
-        } catch(JSONException e) {
-            System.out.println("Failed to update a document");
-            return null;
-
-        } catch(JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
+        } catch(JSONException je) {
+            je.printStackTrace();
+            throw new APPBadRequestException(55, "Json is invalid format");
+        } catch(JsonProcessingException jpe) {
+            jpe.printStackTrace();
+            throw new APPBadRequestException(55, "Json is invalid format");
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -182,9 +184,9 @@ public class FeedService {
 
             return new JSONObject();
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -246,13 +248,13 @@ public class FeedService {
 
             commentCollection.insertOne(convertPostCommentToDocument(comment));
             return comment;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+        } catch (JsonProcessingException jpe) {
+            jpe.printStackTrace();
+            throw new APPBadRequestException(55, "Json is invalid format");
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -270,9 +272,9 @@ public class FeedService {
 
             return new JSONObject();
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
