@@ -7,15 +7,26 @@ public class Notification {
     private String userId;
     private String type;
     private String content;
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
+    private String postId;
     private Date date;
     private boolean isRead;
 
-    public Notification(String userId, String type, String content, boolean isRead, Date date) {
+    public Notification(String userId, String type, String content, boolean isRead, Date date, String postId) {
         this.userId = userId;
         this.type = type;
         this.content = content;
         this.isRead = isRead;
         this.date = date;
+        this.postId = postId;
     }
 
     public String getId() {

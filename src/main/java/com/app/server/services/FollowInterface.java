@@ -21,13 +21,14 @@ import java.util.ArrayList;
 public class FollowInterface {
 
     private static FollowInterface self;
+    private NotificationUtil notificationUtil;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
 
     public FollowInterface() {
         this.collection = MongoPool.getInstance().getCollection("follow");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
+        this.notificationUtil = NotificationUtil.getInstance();
     }
 
     public static FollowInterface getInstance() {
@@ -98,6 +99,8 @@ public class FollowInterface {
             collection.updateOne(update, set);
 
             addFollower(followId, userId);
+
+            notificationUtil.addNotificationWhenFollowerIsAdded(followId, userId);
             return true;
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());

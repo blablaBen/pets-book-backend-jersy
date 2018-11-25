@@ -5,6 +5,7 @@ import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.Notification;
 import com.app.server.models.PetProfile;
+import com.app.server.models.PostComment;
 import com.app.server.models.User;
 import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
@@ -14,7 +15,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import org.json.JSONObject;
 
+import javax.print.Doc;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 
@@ -69,16 +72,42 @@ public class NotificationService {
         }
     }
 
+    public boolean createNotification(Notification noti) {
+        try {
+            Document item = this.convertNotificationDocument(noti);
+            notificationCollection.insertOne(item);
+            return true;
+        } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
+    }
+
     private Notification convertDocumentToNotification(Document item) {
         Notification notification = new Notification(
                 item.getString("userId"),
                 item.getString("type"),
                 item.getString("content"),
                 item.getBoolean("isRead"),
-                item.getDate("date")
+                item.getDate("date"),
+                item.getString("postId")
         );
         notification.setId(item.getObjectId("_id").toString());
         return notification;
+    }
+
+
+    private Document convertNotificationDocument(Notification item) {
+        Document doc = new Document("userId", item.getUserId())
+                .append("type", item.getType())
+                .append("content", item.getContent())
+                .append("date", item.getDate())
+                .append("isRead", item.isRead())
+                .append("postId", item.getPostId());
+        return doc;
     }
 }
 
