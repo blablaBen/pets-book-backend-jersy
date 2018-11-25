@@ -139,7 +139,7 @@ public class UserInterface {
             if (json.has("userLevel"))
                 doc.append("userLevel", json.getInt("userLevel"));
             if (json.has("userScore"))
-                doc.append("userScore", json.getInt("userScore"));
+                doc.append("userScore", APPCrypt.encrypt(json.getString("userScore")));
             if (json.has("portraitUrl"))
                 doc.append("portraitUrl", json.getString("portraitUrl"));
 
@@ -193,7 +193,7 @@ public class UserInterface {
             query.put("_id", new ObjectId(id));
 
             Document doc = new Document();
-            doc.append("userScore", score);
+            doc.append("userScore", APPCrypt.md5(Integer.toString(score)));
 
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
@@ -346,14 +346,19 @@ public class UserInterface {
 
     private Document convertUserToDocument(User user) {
 
-        Document doc = new Document("key", user.getKey())
-                .append("email", user.getEmail())
-                .append("password", user.getPassword())
-                .append("profileName", user.getProfileName())
-                .append("userType", user.getUserType())
-                .append("userLevel", user.getUserLevel())
-                .append("userScore", user.getUserScore())
-                .append("portraitUrl", user.getPortraitUrl());
+        Document doc = null;
+        try {
+            doc = new Document("key", user.getKey())
+                    .append("email", user.getEmail())
+                    .append("password", user.getPassword())
+                    .append("profileName", user.getProfileName())
+                    .append("userType", user.getUserType())
+                    .append("userLevel", user.getUserLevel())
+                    .append("userScore", APPCrypt.encrypt(Integer.toString(user.getUserScore())))
+                    .append("portraitUrl", user.getPortraitUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return doc;
     }
 
@@ -366,17 +371,22 @@ public class UserInterface {
     }
 
     private User convertDocumentToUser(Document item) {
-        User user = new User(
-                item.getString("key"),
-                item.getString("email"),
-                item.getString("password"),
-                item.getString("profileName"),
-                (int) item.get("userType"),
-                (int) item.get("userLevel"),
-                (int) item.get("userScore"),
-                item.getString("portraitUrl")
+        User user = null;
+        try {
+            user = new User(
+                    item.getString("key"),
+                    item.getString("email"),
+                    item.getString("password"),
+                    item.getString("profileName"),
+                    (int) item.get("userType"),
+                    (int) item.get("userLevel"),
+                    Integer.parseInt(APPCrypt.decrypt(item.getString("userScore"))),
+                    item.getString("portraitUrl")
 
-        );
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         user.setId(item.getObjectId("_id").toString());
         return user;
     }
