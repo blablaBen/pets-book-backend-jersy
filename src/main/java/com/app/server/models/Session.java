@@ -1,7 +1,7 @@
 package com.app.server.models;
 
 
-import com.app.server.util.APPCrypt;
+import com.app.server.util.CheckAuthentication;
 
 public class Session {
 
@@ -11,7 +11,7 @@ public class Session {
 
     public Session(User user) throws Exception {
         this.userId = user.getId();
-        this.token = APPCrypt.encrypt(userId);
+        this.token = CheckAuthentication.generateToken(userId);
         this.profileName = user.getProfileName();
 
     }

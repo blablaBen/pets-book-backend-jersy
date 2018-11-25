@@ -27,11 +27,11 @@ public class UserLevelService {
         return self;
     }
 
-    public void addScore(int score, String userId) {
+    public void addScore(int add, String userId) {
         User user = userInterface.getOne(userId);
         int scoreBefore = user.getUserScore();
-        userInterface.updateScore(userId, scoreBefore + score);
-        user.setUserScore(scoreBefore + score);
+        userInterface.updateScore(userId, scoreBefore + add);
+        user.setUserScore(scoreBefore + add);
         decideuUserLevel(user);
     }
 
