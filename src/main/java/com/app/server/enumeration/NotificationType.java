@@ -2,7 +2,7 @@ package com.app.server.enumeration;
 
 public enum NotificationType
 {
-    NEW_COMMENT(1), NEW_FOLLOWER(2), NEW_MESSAGE(3);
+    NEW_COMMENT(1), NEW_FOLLOWER(2), NEW_MESSAGE(3), NEW_CHAT(4);
 
     private final int value;
 

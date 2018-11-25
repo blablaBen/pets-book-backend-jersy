@@ -59,8 +59,35 @@ public class NotificationUtil {
            return true;
        } catch (Exception e) {
            e.printStackTrace();
+           return false;
        }
 
-       return false;
+
    }
+
+   public boolean addNotificationWhenChatRoomIsAdded(String vetId, String petLoverId, String chatroomId) {
+       try {
+           String usernameOfPetLover = (userInterface.getOne(petLoverId)).getProfileName();
+           String content = usernameOfPetLover + " wants to talk with you";
+           Notification notiItem = new Notification(vetId, NotificationType.NEW_CHAT.getValue(), content,false, new Date(), chatroomId);
+           notificationService.createNotification(notiItem);
+           return true;
+       } catch (Exception e) {
+           e.printStackTrace();
+           return false;
+       }
+   }
+
+    public boolean addNotificationWhenMessageIsAdded(String senderId, String receiverId,  String chatroomId) {
+        try {
+            String username = (userInterface.getOne(senderId)).getProfileName();
+            String content = username + " send you a message";
+            Notification notiItem = new Notification(receiverId, NotificationType.NEW_MESSAGE.getValue(), content,false, new Date(), chatroomId);
+            notificationService.createNotification(notiItem);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
