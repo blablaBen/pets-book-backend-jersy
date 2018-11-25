@@ -31,9 +31,12 @@ public class FeedService {
     private MongoCollection<Document> postedStatusCollection = null;
     private MongoCollection<Document> commentCollection = null;
 
+    private UserLevelService userLevelService;
+
     private FeedService() {
         this.postedStatusCollection = MongoPool.getInstance().getCollection("poststatus");
         this.commentCollection = MongoPool.getInstance().getCollection("comment");
+        this.userLevelService = UserLevelService.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     }
@@ -117,6 +120,8 @@ public class FeedService {
             CheckAuthentication.check(headers, status.getUserId());
 
             postedStatusCollection.insertOne(convertPostStatusToDocument(status));
+
+            userLevelService.addScore(3, status.getUserId());  // add 3 score to userScore
             return status;
         } catch(JsonProcessingException e) {
             e.printStackTrace();
@@ -247,6 +252,8 @@ public class FeedService {
             CheckAuthentication.check(headers, comment.getUserId());
 
             commentCollection.insertOne(convertPostCommentToDocument(comment));
+
+            userLevelService.addScore(1, comment.getUserId());  // add 1 score to userScore
             return comment;
         } catch (JsonProcessingException jpe) {
             jpe.printStackTrace();

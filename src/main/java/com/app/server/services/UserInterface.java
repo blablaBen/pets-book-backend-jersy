@@ -187,6 +187,41 @@ public class UserInterface {
 
     }
 
+    public void updateScore(String id, int score) {
+        try {
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+
+            Document doc = new Document();
+            doc.append("userScore", score);
+
+            Document set = new Document("$set", doc);
+            collection.updateOne(query, set);
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void updateLevel(String id, int level) {
+        try {
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(id));
+
+            Document doc = new Document();
+            doc.append("userLevel", level);
+
+            Document set = new Document("$set", doc);
+            collection.updateOne(query, set);
+        } catch (Exception e) {
+            System.out.println("Failed to update a document");
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public Object delete(String id) {
         BasicDBObject query = new BasicDBObject();
