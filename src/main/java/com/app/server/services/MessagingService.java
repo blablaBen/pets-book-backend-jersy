@@ -25,6 +25,7 @@ import java.util.Date;
 
 public class MessagingService {
     private static MessagingService self;
+    private NotificationUtil notificationUtil;
     private ObjectWriter ow;
     private MongoCollection<Document> chatRoomCollection = null;
     private MongoCollection<Document> chatMessageCollection = null;
@@ -32,6 +33,7 @@ public class MessagingService {
     private MessagingService() {
         this.chatRoomCollection = MongoPool.getInstance().getCollection("chat_room");
         this.chatMessageCollection = MongoPool.getInstance().getCollection("chat_message");
+        this.notificationUtil = NotificationUtil.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 
@@ -87,6 +89,7 @@ public class MessagingService {
             ObjectId id = (ObjectId) doc.get("_id");
             room.setId(id.toString());
 
+            notificationUtil.addNotificationWhenChatRoomIsAdded(room.getVetUserId(), room.getPetOwnerUserId(), room.getId());
             return room;
         } catch (JsonProcessingException e) {
             throw new APPBadRequestException(55, "Json is invalid");
@@ -171,6 +174,7 @@ public class MessagingService {
             ObjectId id = (ObjectId) doc.get("_id");
             message.setId(id.toString());
 
+            addNotificationWhenCreateMessage(message);
             return message;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -183,6 +187,17 @@ public class MessagingService {
             throw new APPInternalServerException(99, e.getMessage());
         }
 
+    }
+
+    private void addNotificationWhenCreateMessage(ChatMessage message) {
+        try {
+            String senderId = message.getUserId();
+            ChatRoom room = getChatRoomItem(message.getChatRoomId());
+            String receiverId = room.getVetUserId().equals(senderId) ? room.getPetOwnerUserId() : room.getVetUserId();
+            notificationUtil.addNotificationWhenMessageIsAdded(senderId, receiverId, message.getChatRoomId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
