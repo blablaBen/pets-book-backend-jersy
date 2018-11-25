@@ -49,4 +49,18 @@ public class NotificationUtil {
 
        return true;
    }
+
+   public boolean addNotificationWhenFollowerIsAdded(String followerUserId, String followedUserId) {
+       try {
+           String usernameOfFollower = (userInterface.getOne(followerUserId)).getProfileName();
+           String content = usernameOfFollower + " is following you";
+           Notification notiItem = new Notification(followedUserId, NotificationType.NEW_FOLLOWER.getValue(), content,false, new Date(), null);
+           notificationService.createNotification(notiItem);
+           return true;
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
+       return false;
+   }
 }
