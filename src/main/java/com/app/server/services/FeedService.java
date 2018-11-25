@@ -27,6 +27,7 @@ import java.util.List;
 
 public class FeedService {
     private static FeedService self;
+    private NotificationUtil notificationUtil;
     private ObjectWriter ow;
     private MongoCollection<Document> postedStatusCollection = null;
     private MongoCollection<Document> commentCollection = null;
@@ -37,6 +38,7 @@ public class FeedService {
         this.postedStatusCollection = MongoPool.getInstance().getCollection("poststatus");
         this.commentCollection = MongoPool.getInstance().getCollection("comment");
         this.userLevelService = UserLevelService.getInstance();
+        this.notificationUtil = NotificationUtil.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     }
@@ -47,10 +49,21 @@ public class FeedService {
         return self;
     }
 
-    public PostStatus getOne(HttpHeaders headers, String id) {
+    public PostStatus getOne(HttpHeaders headers, String id)   {
         try {
             CheckAuthentication.onlyCheckAuthenthicationProvided(headers);
+            return queryPostStatus(id);
+        } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
+    }
 
+    public PostStatus queryPostStatus(String id) {
+        try {
             BasicDBObject query = new BasicDBObject();
             query.put("_id", new ObjectId(id));
             Document item = postedStatusCollection.find(query).first();
@@ -65,7 +78,6 @@ public class FeedService {
             a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -252,8 +264,8 @@ public class FeedService {
             CheckAuthentication.check(headers, comment.getUserId());
 
             commentCollection.insertOne(convertPostCommentToDocument(comment));
-
             userLevelService.addScore(1, comment.getUserId());  // add 1 score to userScore
+            addNotificationWhenCommentPosted(comment);
             return comment;
         } catch (JsonProcessingException jpe) {
             jpe.printStackTrace();
@@ -264,6 +276,18 @@ public class FeedService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
+        }
+    }
+
+    private boolean addNotificationWhenCommentPosted(PostComment comment) {
+        try {
+            ArrayList<PostComment> allCommentsUnderPost = getAllComments(comment.getPostId());
+            PostStatus postStatus = queryPostStatus(comment.getPostId());
+            notificationUtil.addNotificationWhenCommentIsAdded(comment, allCommentsUnderPost, postStatus);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

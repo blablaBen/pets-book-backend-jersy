@@ -92,7 +92,8 @@ public class NotificationService {
                 item.getString("type"),
                 item.getString("content"),
                 item.getBoolean("isRead"),
-                item.getDate("date")
+                item.getDate("date"),
+                item.getString("postId")
         );
         notification.setId(item.getObjectId("_id").toString());
         return notification;
@@ -104,7 +105,8 @@ public class NotificationService {
                 .append("type", item.getType())
                 .append("content", item.getContent())
                 .append("date", item.getDate())
-                .append("isRead", item.isRead());
+                .append("isRead", item.isRead())
+                .append("postId", item.getPostId());
         return doc;
     }
 }
