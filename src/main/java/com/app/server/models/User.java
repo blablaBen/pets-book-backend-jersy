@@ -11,17 +11,26 @@ public class User {
     private String profileName;
     private Integer userType;
     private Integer userLevel = 1;
-    private Integer userScore = 100;
+    private Integer userScore = 10;
     private String portraitUrl;
 
-    public User(String key, String email, String password, String profileName, Integer userType, Integer userLevel, Integer userScore, String portraitUrl) {
+    public User(String key, String email, String password, String profileName, Integer userType, String portraitUrl) {
         this.key = key;
         this.email = email;
         this.password = password;
         this.profileName = profileName;
         this.userType = userType;
+        this.portraitUrl = portraitUrl;
+    }
+
+    public User(String key, String email, String password, String profileName, Integer userType, int userLevel, int userScore, String portraitUrl) {
+        this.key = key;
+        this.email = email;
+        this.password = password;
+        this.profileName = profileName;
         this.userLevel = userLevel;
         this.userScore = userScore;
+        this.userType = userType;
         this.portraitUrl = portraitUrl;
     }
 
@@ -29,7 +38,7 @@ public class User {
     }
 
     public static void main(String[] args) {
-        User user = new User("qwertu43323", "test@hotmail.com", "asdgf2345", "test", 1, 1, 100, "http://xxx.com/1234.jpg");
+        User user = new User("qwertu43323", "test@hotmail.com", "asdgf2345", "test", 1, "http://xxx.com/1234.jpg");
 
     }
 

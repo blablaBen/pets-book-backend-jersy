@@ -405,10 +405,7 @@ public class UserInterface {
                 APPCrypt.md5(json.getString("password")),
                 json.getString("profileName"),
                 json.getInt("userType"),
-                json.getInt("userLevel"),
-                json.getInt("userScore"),
                 json.getString("portraitUrl")
-
         );
         return user;
     }
@@ -418,14 +415,4 @@ public class UserInterface {
        return profile;
     }
 
-    /*void checkAuthentication(HttpHeaders headers, String id) throws Exception {
-        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeaders == null)
-            throw new APPUnauthorizedException(70, "No Authorization Headers");
-        String token = authHeaders.get(0);
-        String clearToken = APPCrypt.decrypt(token);
-        if (id.compareTo(clearToken) != 0) {
-            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
-        }
-    }*/
 }
