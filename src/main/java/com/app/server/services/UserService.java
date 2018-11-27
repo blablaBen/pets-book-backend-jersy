@@ -100,7 +100,7 @@ public class UserService {
             json = new JSONObject(ow.writeValueAsString(obj));
             User user = convertJsonToUser(json);
             if (getByEmail(user.getEmail()) != null) {
-                throw new APPBadRequestException(34);
+                throw new APPBadRequestException(34, "This email address already exists.");
             }
             Document doc = convertUserToDocument(user);
             collection.insertOne(doc);
@@ -108,15 +108,12 @@ public class UserService {
             user.setId(id.toString());
             followService.initFollow(doc.getObjectId("_id").toString());
             return user;
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
-        } catch (APPBadRequestException e) {
-            e.printStackTrace();
-            return null;
+        } catch (JsonProcessingException je) {
+            je.printStackTrace();
+            throw new APPBadRequestException(34, "This data in Json is invalid" + je.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -131,7 +128,7 @@ public class UserService {
             return user;
         }  catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -169,15 +166,13 @@ public class UserService {
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
             return request;
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to update a document");
-            return null;
-        } catch (APPUnauthorizedException a) {
-            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (JsonProcessingException je) {
+            throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
+        } catch (APPUnauthorizedException au) {
+            throw new APPUnauthorizedException(34, au.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -198,13 +193,11 @@ public class UserService {
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
             return request;
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to update a document");
-            return null;
+        } catch (JsonProcessingException je) {
+            throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -220,8 +213,8 @@ public class UserService {
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -237,8 +230,8 @@ public class UserService {
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -275,9 +268,8 @@ public class UserService {
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -294,15 +286,15 @@ public class UserService {
             ObjectId id = (ObjectId) doc.get("_id");
             pet.setId(id.toString());
             return pet;
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to create a document");
-            return null;
+        } catch (JsonProcessingException je) {
+            je.printStackTrace();
+            throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -333,15 +325,15 @@ public class UserService {
             System.out.println("Failed to update a document");
             return null;
 
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to update a document");
-            return null;
+        } catch (JsonProcessingException je) {
+            je.printStackTrace();
+            throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
-            return null;
+            throw  new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -358,9 +350,9 @@ public class UserService {
 
             return new JSONObject();
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
