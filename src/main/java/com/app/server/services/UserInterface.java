@@ -94,7 +94,6 @@ public class UserInterface {
 
 
     public User create(Object obj) {
-
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
@@ -109,6 +108,21 @@ public class UserInterface {
             System.out.println("Failed to create a document");
             return null;
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public User createFromSSO(User user) {
+        try {
+            user.setSSOUser(true);
+            Document doc = convertUserToDocument(user);
+            collection.insertOne(doc);
+            ObjectId id = (ObjectId) doc.get("_id");
+            user.setId(id.toString());
+            followInterface.initFollow(doc.getObjectId("_id").toString());
+            return user;
+        }  catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -346,7 +360,6 @@ public class UserInterface {
     }
 
     private Document convertUserToDocument(User user) {
-
         Document doc = null;
         try {
             doc = new Document("key", user.getKey())
@@ -356,10 +369,12 @@ public class UserInterface {
                     .append("userType", user.getUserType())
                     .append("userLevel", user.getUserLevel())
                     .append("userScore", APPCrypt.encrypt(Integer.toString(user.getUserScore())))
-                    .append("portraitUrl", user.getPortraitUrl());
+                    .append("portraitUrl", user.getPortraitUrl())
+                    .append("isSSOUser", user.isSSOUser());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return doc;
     }
 
@@ -383,12 +398,11 @@ public class UserInterface {
                     (int) item.get("userLevel"),
                     Integer.parseInt(APPCrypt.decrypt(item.getString("userScore"))),
                     item.getString("portraitUrl")
-
             );
+            user.setSSOUser(item.getBoolean("isSSOUser"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.setId(item.getObjectId("_id").toString());
         return user;
     }
 

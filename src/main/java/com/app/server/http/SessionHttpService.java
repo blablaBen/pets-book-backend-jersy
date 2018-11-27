@@ -33,8 +33,10 @@ public class SessionHttpService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse create(Object request) {
-
+    public APPResponse create(Object request, @QueryParam("isSSO") boolean isSSO) {
+        if(isSSO) {
+            return new APPResponse(service.createFromToken(request));
+        }
         return new APPResponse(service.create(request));
     }
 

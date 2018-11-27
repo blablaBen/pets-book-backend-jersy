@@ -14,6 +14,16 @@ public class User {
     private Integer userScore = 10;
     private String portraitUrl;
 
+    public boolean isSSOUser() {
+        return isSSOUser;
+    }
+
+    public void setSSOUser(boolean SSOUser) {
+        isSSOUser = SSOUser;
+    }
+
+    private boolean isSSOUser;
+
     public User(String key, String email, String password, String profileName, Integer userType, String portraitUrl) {
         this.key = key;
         this.email = email;
@@ -21,6 +31,7 @@ public class User {
         this.profileName = profileName;
         this.userType = userType;
         this.portraitUrl = portraitUrl;
+        this.isSSOUser = false;
     }
 
     public User(String key, String email, String password, String profileName, Integer userType, int userLevel, int userScore, String portraitUrl) {
@@ -32,6 +43,7 @@ public class User {
         this.userScore = userScore;
         this.userType = userType;
         this.portraitUrl = portraitUrl;
+        this.isSSOUser = false;
     }
 
     public User() {

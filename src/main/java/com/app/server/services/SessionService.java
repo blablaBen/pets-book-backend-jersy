@@ -5,29 +5,42 @@ import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPNotFoundException;
 import com.app.server.models.Session;
 import com.app.server.models.User;
+import com.app.server.models.UserSSOInformation;
 import com.app.server.util.APPCrypt;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.json.JSONObject;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.json.JsonFactory;
+
+import java.util.Collections;
 
 /**
  * Services run as singletons
  */
 
 public class SessionService {
-
     private static SessionService self;
+    private static UserInterface userInterface;
+    private AuthenthicationGatewayService authenthicationGatewayService;
     private ObjectWriter ow;
     private MongoCollection<Document> userCollection = null;
     private MongoCollection<Document> carsCollection = null;
 
     private SessionService() {
         this.userCollection = MongoPool.getInstance().getCollection("user");
+        this.userInterface = UserInterface.getInstance();
+        this.authenthicationGatewayService = AuthenthicationGatewayService.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     }
@@ -74,25 +87,55 @@ public class SessionService {
     }
 
 
-    private User convertDocumentToUser(Document item) {
-        User user = null;
+    public Session createFromToken(Object request) {
         try {
-            user = new User(
-                    item.getString("key"),
-                    item.getString("email"),
-                    item.getString("password"),
-                    item.getString("profileName"),
-                    (int) item.get("userType"),
-                    (int) item.get("userLevel"),
-                    Integer.parseInt(APPCrypt.decrypt(item.getString("userScore"))),
-                    item.getString("portraitUrl")
+            JSONObject json = new JSONObject(ow.writeValueAsString(request));
+            UserSSOInformation userInformationFromSSO = authenthicationGatewayService.ssoLogin(json.getString("idtoken"));
 
-            );
+            if (userInformationFromSSO != null) {
+                BasicDBObject query = new BasicDBObject();
+                query.put("email", userInformationFromSSO.getEmail());
+                query.put("isSSOUser", true);
+                Document item = userCollection.find(query).first();
+                User user = new User();
+                if (item == null) {
+                   // add new User;
+                    user = userInterface.createFromSSO(new User(
+                            userInformationFromSSO.getEmail(),
+                            userInformationFromSSO.getEmail(),
+                            "",
+                            userInformationFromSSO.getProfileName(),
+                            1,
+                            1,
+                            10,
+                            userInformationFromSSO.getPortraitUrl()));
+                } else {
+                    user = convertDocumentToUser(item);
+                }
+                user.setId(item.getObjectId("_id").toString());
+                return new Session(user);
+            } else {
+                throw new APPBadRequestException(33, "Invalid ID token.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new APPInternalServerException(0, e.getMessage());
         }
-        user.setId(item.getObjectId("_id").toString());
-        return user;
     }
 
+
+    private User convertDocumentToUser(Document item) throws Exception {
+        User user = new User(
+                item.getString("key"),
+                item.getString("email"),
+                item.getString("password"),
+                item.getString("profileName"),
+                (int) item.get("userType"),
+                (int) item.get("userLevel"),
+                Integer.parseInt(APPCrypt.decrypt(item.getString("userScore"))),
+                item.getString("portraitUrl")
+        );
+        user.setSSOUser(item.getBoolean("isSSOUser"));
+        return user;
+    }
 } // end of main()
