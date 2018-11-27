@@ -321,11 +321,7 @@ public class UserService {
             Document set = new Document("$set", doc);
             petProfileCollection.updateOne(query, set);
             return request;
-        } catch (JSONException e) {
-            System.out.println("Failed to update a document");
-            return null;
-
-        } catch (JsonProcessingException je) {
+        }  catch (JsonProcessingException je) {
             je.printStackTrace();
             throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
         } catch (APPUnauthorizedException a) {

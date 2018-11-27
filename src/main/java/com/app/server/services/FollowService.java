@@ -1,10 +1,12 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.mongodb.BasicDBObject;
@@ -59,7 +61,6 @@ public class FollowService {
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("EXCEPTION!!!!");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
@@ -100,10 +101,11 @@ public class FollowService {
 
             return true;
         } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to create a document");
-            return false;
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -134,8 +136,8 @@ public class FollowService {
 
             return true;
         } catch (Exception e) {
-            System.out.println("Failed to create a document");
-            return false;
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
         }
 
     }
@@ -155,12 +157,15 @@ public class FollowService {
 
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
-
-        } catch (JSONException e) {
-            System.out.println("Failed to addFollow a document");
-
+            return obj;
+        } catch (APPUnauthorizedException a) {
+            a.printStackTrace();
+            throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
-        return obj;
+
     }
 
     public void initFollow(String userId) {
@@ -171,7 +176,8 @@ public class FollowService {
 
             collection.insertOne(doc);
         } catch (Exception e) {
-
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -204,8 +210,8 @@ public class FollowService {
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to delete a following");
-
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -234,8 +240,8 @@ public class FollowService {
             collection.updateOne(update, set);
 
         } catch (Exception e) {
-            System.out.println("Failed to delete a follower");
-
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 }
