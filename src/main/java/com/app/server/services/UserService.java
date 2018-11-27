@@ -215,7 +215,7 @@ public class UserService {
             query.put("_id", new ObjectId(id));
 
             Document doc = new Document();
-            doc.append("userScore", APPCrypt.md5(Integer.toString(score)));
+            doc.append("userScore", APPCrypt.encrypt(Integer.toString(score)));
 
             Document set = new Document("$set", doc);
             collection.updateOne(query, set);
