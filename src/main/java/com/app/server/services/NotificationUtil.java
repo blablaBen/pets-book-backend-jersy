@@ -33,6 +33,7 @@ public class NotificationUtil {
                Notification notiItemForComment = new Notification(item.getUserId(), NotificationType.NEW_COMMENT.getValue(), contentForComment, false, date, comment.getPostId());
                notificationService.createNotification(notiItemForComment);
            } catch (Exception e) {
+               // we won't throw exception from notification
                e.printStackTrace();
            }
        }
@@ -43,6 +44,7 @@ public class NotificationUtil {
            Notification notiItemForPost = new Notification(posterStatus.getUserId(), NotificationType.NEW_COMMENT.getValue(), contentForPost, false,  date, comment.getPostId());
            notificationService.createNotification(notiItemForPost);
        } catch (Exception e) {
+           // we won't throw exception from notification
            e.printStackTrace();
        }
 
@@ -57,6 +59,7 @@ public class NotificationUtil {
            notificationService.createNotification(notiItem);
            return true;
        } catch (Exception e) {
+           // we won't throw exception from notification
            e.printStackTrace();
            return false;
        }
@@ -72,6 +75,7 @@ public class NotificationUtil {
            notificationService.createNotification(notiItem);
            return true;
        } catch (Exception e) {
+           // we won't throw exception from notification
            e.printStackTrace();
            return false;
        }
@@ -85,6 +89,7 @@ public class NotificationUtil {
             notificationService.createNotification(notiItem);
             return true;
         } catch (Exception e) {
+            // we won't throw exception from notification
             e.printStackTrace();
             return false;
         }

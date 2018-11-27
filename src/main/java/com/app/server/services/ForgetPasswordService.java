@@ -1,8 +1,11 @@
 package com.app.server.services;
 
+import com.app.server.http.exceptions.APPBadRequestException;
+import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.models.ForgetPassword;
 import com.app.server.models.User;
 import com.app.server.util.MongoPool;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.mongodb.BasicDBObject;
@@ -45,9 +48,12 @@ public class ForgetPasswordService {
 
             collection.insertOne(doc);
             return true;
+        } catch (JsonProcessingException je) {
+            je.printStackTrace();
+            throw new APPBadRequestException(34, "This data in Json is invalid:" + je.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to create a forget password");
-            return false;
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -65,8 +71,8 @@ public class ForgetPasswordService {
             }
 
         } catch (Exception e) {
-            System.out.println("Failed to create a forget password");
-            return null;
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 
@@ -114,8 +120,8 @@ public class ForgetPasswordService {
             userService.updatePassword(user.getId(), request);
             return true;
         } catch (Exception e) {
-            System.out.println("Failed to create a forget password");
-            return false;
+            e.printStackTrace();
+            throw  new APPInternalServerException(99, e.getMessage());
         }
     }
 }

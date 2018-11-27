@@ -68,10 +68,6 @@ public class SessionService {
             return new Session(user);
         } catch (JsonProcessingException e) {
             throw new APPBadRequestException(33, e.getMessage());
-        } catch (APPBadRequestException e) {
-            throw e;
-        } catch (APPNotFoundException e) {
-            throw e;
         } catch (Exception e) {
             throw new APPInternalServerException(0, e.getMessage());
         }

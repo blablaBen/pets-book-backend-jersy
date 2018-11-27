@@ -61,7 +61,6 @@ public class NotificationService {
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
         } catch (Exception e) {
-            System.out.println("Failed to update a document");
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
         }
