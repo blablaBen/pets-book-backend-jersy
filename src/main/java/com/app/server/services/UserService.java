@@ -1,6 +1,7 @@
 package com.app.server.services;
 
 
+import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.PetProfile;
@@ -98,6 +99,9 @@ public class UserService {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
             User user = convertJsonToUser(json);
+            if (getByEmail(user.getEmail()) != null) {
+                throw new APPBadRequestException(34);
+            }
             Document doc = convertUserToDocument(user);
             collection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
@@ -106,6 +110,9 @@ public class UserService {
             return user;
         } catch (JsonProcessingException e) {
             System.out.println("Failed to create a document");
+            return null;
+        } catch (APPBadRequestException e) {
+            e.printStackTrace();
             return null;
         } catch (Exception e) {
             e.printStackTrace();
