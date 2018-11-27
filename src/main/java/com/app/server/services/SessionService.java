@@ -75,17 +75,22 @@ public class SessionService {
 
 
     private User convertDocumentToUser(Document item) {
-        User user = new User(
-                item.getString("key"),
-                item.getString("email"),
-                item.getString("password"),
-                item.getString("profileName"),
-                (int) item.get("userType"),
-                (int) item.get("userLevel"),
-                (int) item.get("userScore"),
-                item.getString("portraitUrl")
+        User user = null;
+        try {
+            user = new User(
+                    item.getString("key"),
+                    item.getString("email"),
+                    item.getString("password"),
+                    item.getString("profileName"),
+                    (int) item.get("userType"),
+                    (int) item.get("userLevel"),
+                    Integer.parseInt(APPCrypt.decrypt(item.getString("userScore"))),
+                    item.getString("portraitUrl")
 
-        );
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         user.setId(item.getObjectId("_id").toString());
         return user;
     }
