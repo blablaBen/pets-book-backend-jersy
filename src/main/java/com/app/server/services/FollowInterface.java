@@ -21,14 +21,12 @@ import java.util.ArrayList;
 public class FollowInterface {
 
     private static FollowInterface self;
-    private NotificationUtil notificationUtil;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
 
-    public FollowInterface() {
+    private FollowInterface() {
         this.collection = MongoPool.getInstance().getCollection("follow");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.notificationUtil = NotificationUtil.getInstance();
     }
 
     public static FollowInterface getInstance() {
@@ -100,7 +98,6 @@ public class FollowInterface {
 
             addFollower(followId, userId);
 
-            notificationUtil.addNotificationWhenFollowerIsAdded(followId, userId);
             return true;
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
@@ -241,15 +238,4 @@ public class FollowInterface {
 
         }
     }
-
-//    void checkAuthentication(HttpHeaders headers, String id) throws Exception {
-//        List<String> authHeaders = headers.getRequestHeader(HttpHeaders.AUTHORIZATION);
-//        if (authHeaders == null)
-//            throw new APPUnauthorizedException(70, "No Authorization Headers");
-//        String token = authHeaders.get(0);
-//        String clearToken = APPCrypt.decrypt(token);
-//        if (id.compareTo(clearToken) != 0) {
-//            throw new APPUnauthorizedException(71, "Invalid token. Please try getting a new token");
-//        }
-//    }
 }

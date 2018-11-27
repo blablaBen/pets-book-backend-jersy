@@ -4,9 +4,6 @@ import com.app.server.http.exceptions.APPBadRequestException;
 import com.app.server.http.exceptions.APPInternalServerException;
 import com.app.server.http.exceptions.APPUnauthorizedException;
 import com.app.server.models.Notification;
-import com.app.server.models.PetProfile;
-import com.app.server.models.PostComment;
-import com.app.server.models.User;
 import com.app.server.util.CheckAuthentication;
 import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +12,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
-import org.json.JSONObject;
 
-import javax.print.Doc;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 

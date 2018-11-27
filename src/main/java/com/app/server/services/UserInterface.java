@@ -28,13 +28,14 @@ public class UserInterface {
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
     private MongoCollection<Document> petProfileCollection = null;
-    FollowInterface followInterface = new FollowInterface();
+    FollowInterface followInterface;
 
 
     public UserInterface() {
         this.collection = MongoPool.getInstance().getCollection("user");
         this.petProfileCollection = MongoPool.getInstance().getCollection("pet_profile");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        this.followInterface = FollowInterface.getInstance();
 
     }
 

@@ -18,7 +18,6 @@ public class UserLevelService {
     private UserLevelService() {
         this.userInterface = UserInterface.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
     }
 
     public static UserLevelService getInstance() {
