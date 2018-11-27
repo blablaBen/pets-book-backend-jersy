@@ -274,6 +274,7 @@ public class FeedService {
 
             commentCollection.insertOne(convertPostCommentToDocument(comment));
             userLevelService.addScore(1, comment.getUserId());  // add 1 score to userScore
+            increaseOrDecreaseCommentCount(postId, true);
             addNotificationWhenCommentPosted(comment);
             return comment;
         } catch (JsonProcessingException jpe) {
@@ -282,6 +283,25 @@ public class FeedService {
         } catch (APPUnauthorizedException a) {
             a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new APPInternalServerException(99, e.getMessage());
+        }
+    }
+
+    public boolean increaseOrDecreaseCommentCount(String postId, boolean isIncrease) {
+        try {
+            BasicDBObject query = new BasicDBObject();
+            query.put("_id", new ObjectId(postId));
+
+            Document result = postedStatusCollection.find(query).first();
+            PostStatus postStatus = convertDocumentToPostedStatus(result);
+
+            Document doc = new Document();
+            doc.append("commentCount", isIncrease ? postStatus.getCommentCount()+1 : postStatus.getCommentCount()-1);
+            Document set = new Document("$set", doc);
+            postedStatusCollection.updateOne(query,set);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
@@ -303,8 +323,12 @@ public class FeedService {
     public Object deleteComment(HttpHeaders headers, String commentId) {
         try {
             PostComment comment = getComment(commentId);
-            CheckAuthentication.check(headers, comment.getUserId());
+            if(comment == null) {
+                throw new APPBadRequestException(34, "This comment is already deleted");
+            }
 
+            CheckAuthentication.check(headers, comment.getUserId());
+            increaseOrDecreaseCommentCount(comment.getPostId(), false);
             BasicDBObject query = new BasicDBObject();
             query.put("_id", new ObjectId(commentId));
 
