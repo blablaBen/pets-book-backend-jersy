@@ -73,8 +73,8 @@ public class UserHttpService {
     @Path("{userId}/pets")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public APPResponse postPet(@Context HttpHeaders headers, Object obj) {
-        return new APPResponse(userInterface.createPetProfile(headers, obj).getId());
+    public APPResponse postPet(@Context HttpHeaders headers, Object obj, @PathParam("userId") String userId) {
+        return new APPResponse(userInterface.createPetProfile(headers, obj, userId).getId());
     }
 
     //Getting all pets.

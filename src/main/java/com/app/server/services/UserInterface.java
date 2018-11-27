@@ -260,11 +260,11 @@ public class UserInterface {
         }
     }
 
-    public PetProfile createPetProfile(HttpHeaders headers, Object obj) {
+    public PetProfile createPetProfile(HttpHeaders headers, Object obj, String userId) {
         try {
             JSONObject json = null;
             json = new JSONObject(ow.writeValueAsString(obj));
-            PetProfile pet = convertJsonToPetProfile(json);
+            PetProfile pet = convertJsonToPetProfile(json, userId);
 
             CheckAuthentication.check(headers, pet.getOwnerUserId());
 
@@ -411,8 +411,8 @@ public class UserInterface {
         return user;
     }
 
-    private PetProfile convertJsonToPetProfile(JSONObject json) {
-       PetProfile profile = new PetProfile(json.getString("ownerUserId"), json.getString("description"), json.getString("portraitUrl"));
+    private PetProfile convertJsonToPetProfile(JSONObject json, String userId) {
+        PetProfile profile = new PetProfile(userId, json.getString("description"), json.getString("portraitUrl"));
        return profile;
     }
 
