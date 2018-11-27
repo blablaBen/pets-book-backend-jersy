@@ -31,17 +31,16 @@ public class UserLevelService {
         int scoreBefore = user.getUserScore();
         userService.updateScore(userId, scoreBefore + add);
         user.setUserScore(scoreBefore + add);
-        decideuUserLevel(user);
+        decideuUserLevel(user, userId);
     }
 
-    public void decideuUserLevel(User user) {
+    public void decideuUserLevel(User user, String userId) {
         int curLevel = user.getUserLevel();
         UserLevelEnum userLevel = UserLevelEnum.valueOf(curLevel);
         if (user.getUserScore() > userLevel.getHighScore()) {
             UserLevelEnum nextLevel = UserLevelEnum.getNextLevel(curLevel);
-            userService.updateLevel(user.getId(), nextLevel.getValue());
+            userService.updateLevel(userId, nextLevel.getValue());
         }
     }
-
 
 }
