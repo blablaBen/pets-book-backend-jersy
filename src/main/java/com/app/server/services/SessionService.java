@@ -100,15 +100,15 @@ public class SessionService {
                 User user = new User();
                 if (item == null) {
                    // add new User;
-                    user = userInterface.createFromSSO(new User(
+                    User newUSerObj = new User(
                             userInformationFromSSO.getEmail(),
                             userInformationFromSSO.getEmail(),
                             "",
                             userInformationFromSSO.getProfileName(),
                             1,
-                            1,
-                            10,
-                            userInformationFromSSO.getPortraitUrl()));
+                            userInformationFromSSO.getPortraitUrl());
+                    newUSerObj.setSSOUser(true);
+                    user = userInterface.createFromSSO(newUSerObj);
                 } else {
                     user = convertDocumentToUser(item);
                 }
