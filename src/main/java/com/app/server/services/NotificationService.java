@@ -60,6 +60,9 @@ public class NotificationService {
 
         } catch (APPUnauthorizedException a) {
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());

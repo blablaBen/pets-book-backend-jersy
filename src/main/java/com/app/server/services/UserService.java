@@ -111,6 +111,8 @@ public class UserService {
         } catch (JsonProcessingException je) {
             je.printStackTrace();
             throw new APPBadRequestException(34, "This data in Json is invalid" + je.getMessage());
+        } catch (APPBadRequestException b) {
+            throw b;
         } catch (Exception e) {
             e.printStackTrace();
             throw  new APPInternalServerException(99, e.getMessage());

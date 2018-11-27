@@ -68,6 +68,9 @@ public class SessionService {
             return new Session(user);
         } catch (JsonProcessingException e) {
             throw new APPBadRequestException(33, e.getMessage());
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (Exception e) {
             throw new APPInternalServerException(0, e.getMessage());
         }
@@ -105,6 +108,9 @@ public class SessionService {
             } else {
                 throw new APPBadRequestException(33, "Invalid ID token.");
             }
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(0, e.getMessage());

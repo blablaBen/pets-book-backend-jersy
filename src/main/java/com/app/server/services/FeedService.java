@@ -77,6 +77,9 @@ public class FeedService {
         } catch (APPUnauthorizedException a) {
             a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
@@ -141,6 +144,9 @@ public class FeedService {
         } catch (APPUnauthorizedException a) {
             a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (Exception e) {
             e.printStackTrace();
             throw new APPInternalServerException(99, e.getMessage());
@@ -183,6 +189,9 @@ public class FeedService {
         } catch(JsonProcessingException jpe) {
             jpe.printStackTrace();
             throw new APPBadRequestException(55, "Json is invalid format");
+        } catch (APPBadRequestException b) {
+            b.printStackTrace();
+            throw b;
         } catch (APPUnauthorizedException a) {
             a.printStackTrace();
             throw new APPUnauthorizedException(34, a.getMessage());
