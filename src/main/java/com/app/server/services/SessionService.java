@@ -102,8 +102,9 @@ public class SessionService {
                     user = userService.createFromSSO(newUSerObj);
                 } else {
                     user = convertDocumentToUser(item);
+                    user.setId(item.getObjectId("_id").toString());
                 }
-                user.setId(item.getObjectId("_id").toString());
+
                 return new Session(user);
             } else {
                 throw new APPBadRequestException(33, "Invalid ID token.");
