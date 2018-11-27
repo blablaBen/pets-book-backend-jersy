@@ -20,12 +20,12 @@ public class ForgetPasswordService {
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
 
-    private UserInterface userInterface;
+    private UserService userService;
 
     private ForgetPasswordService() {
         this.collection = MongoPool.getInstance().getCollection("forgetPassword");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        userInterface = UserInterface.getInstance();
+        userService = UserService.getInstance();
 
     }
 
@@ -108,10 +108,10 @@ public class ForgetPasswordService {
             if (json.get("email") == null || json.get("password") == null) {
                 return false;
             }
-            User user = userInterface.getByEmail(json.getString("email"));
+            User user = userService.getByEmail(json.getString("email"));
             if (user == null) return false;
 
-            userInterface.updatePassword(user.getId(), request);
+            userService.updatePassword(user.getId(), request);
             return true;
         } catch (Exception e) {
             System.out.println("Failed to create a forget password");

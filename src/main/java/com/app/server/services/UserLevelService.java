@@ -12,11 +12,11 @@ public class UserLevelService {
 
     private ObjectWriter ow;
 
-    private UserInterface userInterface;
+    private UserService userService;
 
 
     private UserLevelService() {
-        this.userInterface = UserInterface.getInstance();
+        this.userService = UserService.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 
@@ -27,9 +27,9 @@ public class UserLevelService {
     }
 
     public void addScore(int add, String userId) {
-        User user = userInterface.getOne(userId);
+        User user = userService.getOne(userId);
         int scoreBefore = user.getUserScore();
-        userInterface.updateScore(userId, scoreBefore + add);
+        userService.updateScore(userId, scoreBefore + add);
         user.setUserScore(scoreBefore + add);
         decideuUserLevel(user);
     }
@@ -39,7 +39,7 @@ public class UserLevelService {
         UserLevelEnum userLevel = UserLevelEnum.valueOf(curLevel);
         if (user.getUserScore() > userLevel.getHighScore()) {
             UserLevelEnum nextLevel = UserLevelEnum.getNextLevel(curLevel);
-            userInterface.updateLevel(user.getId(), nextLevel.getValue());
+            userService.updateLevel(user.getId(), nextLevel.getValue());
         }
     }
 

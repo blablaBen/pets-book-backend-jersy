@@ -18,20 +18,20 @@ import org.json.JSONObject;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 
-public class FollowInterface {
+public class FollowService {
 
-    private static FollowInterface self;
+    private static FollowService self;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
 
-    private FollowInterface() {
+    private FollowService() {
         this.collection = MongoPool.getInstance().getCollection("follow");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     }
 
-    public static FollowInterface getInstance() {
+    public static FollowService getInstance() {
         if (self == null)
-            self = new FollowInterface();
+            self = new FollowService();
         return self;
     }
 

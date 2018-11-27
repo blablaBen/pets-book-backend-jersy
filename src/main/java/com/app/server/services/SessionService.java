@@ -11,19 +11,10 @@ import com.app.server.util.MongoPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.json.JSONObject;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.json.JsonFactory;
-
-import java.util.Collections;
 
 /**
  * Services run as singletons
@@ -31,7 +22,7 @@ import java.util.Collections;
 
 public class SessionService {
     private static SessionService self;
-    private static UserInterface userInterface;
+    private static UserService userService;
     private AuthenthicationGatewayService authenthicationGatewayService;
     private ObjectWriter ow;
     private MongoCollection<Document> userCollection = null;
@@ -39,7 +30,7 @@ public class SessionService {
 
     private SessionService() {
         this.userCollection = MongoPool.getInstance().getCollection("user");
-        this.userInterface = UserInterface.getInstance();
+        this.userService = UserService.getInstance();
         this.authenthicationGatewayService = AuthenthicationGatewayService.getInstance();
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
@@ -108,7 +99,7 @@ public class SessionService {
                             1,
                             userInformationFromSSO.getPortraitUrl());
                     newUSerObj.setSSOUser(true);
-                    user = userInterface.createFromSSO(newUSerObj);
+                    user = userService.createFromSSO(newUSerObj);
                 } else {
                     user = convertDocumentToUser(item);
                 }

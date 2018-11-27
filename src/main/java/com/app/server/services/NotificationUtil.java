@@ -5,18 +5,17 @@ import com.app.server.models.Notification;
 import com.app.server.models.PostComment;
 import com.app.server.models.PostStatus;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class NotificationUtil {
     private static NotificationUtil self;
    private NotificationService notificationService;
-   private UserInterface userInterface;
+   private UserService userService;
 
    public NotificationUtil() {
        this.notificationService = NotificationService.getInstance();
-       this.userInterface = UserInterface.getInstance();
+       this.userService = UserService.getInstance();
    }
 
     public static NotificationUtil getInstance(){
@@ -29,7 +28,7 @@ public class NotificationUtil {
        Date date = new Date();
        for(PostComment item : commentsUnderPost) {
            try {
-               String username = (userInterface.getOne(comment.getUserId())).getProfileName();
+               String username = (userService.getOne(comment.getUserId())).getProfileName();
                String contentForComment = username + " has given a comment on the post you have commented";
                Notification notiItemForComment = new Notification(item.getUserId(), NotificationType.NEW_COMMENT.getValue(), contentForComment, false, date, comment.getPostId());
                notificationService.createNotification(notiItemForComment);
@@ -39,7 +38,7 @@ public class NotificationUtil {
        }
 
        try {
-           String posterUsername = (userInterface.getOne(comment.getUserId())).getProfileName();
+           String posterUsername = (userService.getOne(comment.getUserId())).getProfileName();
            String contentForPost = posterUsername + " has given a comment on your post";
            Notification notiItemForPost = new Notification(posterStatus.getUserId(), NotificationType.NEW_COMMENT.getValue(), contentForPost, false,  date, comment.getPostId());
            notificationService.createNotification(notiItemForPost);
@@ -52,7 +51,7 @@ public class NotificationUtil {
 
    public boolean addNotificationWhenFollowerIsAdded(String followerUserId, String followedUserId) {
        try {
-           String usernameOfFollower = (userInterface.getOne(followerUserId)).getProfileName();
+           String usernameOfFollower = (userService.getOne(followerUserId)).getProfileName();
            String content = usernameOfFollower + " is following you";
            Notification notiItem = new Notification(followedUserId, NotificationType.NEW_FOLLOWER.getValue(), content,false, new Date(), null);
            notificationService.createNotification(notiItem);
@@ -67,7 +66,7 @@ public class NotificationUtil {
 
    public boolean addNotificationWhenChatRoomIsAdded(String vetId, String petLoverId, String chatroomId) {
        try {
-           String usernameOfPetLover = (userInterface.getOne(petLoverId)).getProfileName();
+           String usernameOfPetLover = (userService.getOne(petLoverId)).getProfileName();
            String content = usernameOfPetLover + " wants to talk with you";
            Notification notiItem = new Notification(vetId, NotificationType.NEW_CHAT.getValue(), content,false, new Date(), chatroomId);
            notificationService.createNotification(notiItem);
@@ -80,7 +79,7 @@ public class NotificationUtil {
 
     public boolean addNotificationWhenMessageIsAdded(String senderId, String receiverId,  String chatroomId) {
         try {
-            String username = (userInterface.getOne(senderId)).getProfileName();
+            String username = (userService.getOne(senderId)).getProfileName();
             String content = username + " send you a message";
             Notification notiItem = new Notification(receiverId, NotificationType.NEW_MESSAGE.getValue(), content,false, new Date(), chatroomId);
             notificationService.createNotification(notiItem);

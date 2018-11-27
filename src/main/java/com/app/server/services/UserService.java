@@ -23,25 +23,25 @@ import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 
 
-public class UserInterface {
-    private static UserInterface self;
+public class UserService {
+    private static UserService self;
     private ObjectWriter ow;
     private MongoCollection<Document> collection = null;
     private MongoCollection<Document> petProfileCollection = null;
-    FollowInterface followInterface;
+    FollowService followService;
 
 
-    public UserInterface() {
+    public UserService() {
         this.collection = MongoPool.getInstance().getCollection("user");
         this.petProfileCollection = MongoPool.getInstance().getCollection("pet_profile");
         ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        this.followInterface = FollowInterface.getInstance();
+        this.followService = FollowService.getInstance();
 
     }
 
-    public static UserInterface getInstance() {
+    public static UserService getInstance() {
         if (self == null)
-            self = new UserInterface();
+            self = new UserService();
         return self;
     }
 
@@ -102,7 +102,7 @@ public class UserInterface {
             collection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
             user.setId(id.toString());
-            followInterface.initFollow(doc.getObjectId("_id").toString());
+            followService.initFollow(doc.getObjectId("_id").toString());
             return user;
         } catch (JsonProcessingException e) {
             System.out.println("Failed to create a document");
@@ -120,7 +120,7 @@ public class UserInterface {
             collection.insertOne(doc);
             ObjectId id = (ObjectId) doc.get("_id");
             user.setId(id.toString());
-            followInterface.initFollow(doc.getObjectId("_id").toString());
+            followService.initFollow(doc.getObjectId("_id").toString());
             return user;
         }  catch (Exception e) {
             e.printStackTrace();
