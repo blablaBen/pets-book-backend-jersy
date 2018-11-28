@@ -1,0 +1,12 @@
+{ 
+    "_id" : ObjectId("5bfcb27669c4f102f34cb4f4"), 
+    "ownerUserId" : "5bfc8bcf69c4f102f3774c24", 
+    "description" : "My big pig", 
+    "portraitUrl" : "www.pig.com"
+}
+{ 
+    "_id" : ObjectId("5bfcb29669c4f102f34cb4f6"), 
+    "ownerUserId" : "5bfc8bcf69c4f102f3774c24", 
+    "description" : "My pig", 
+    "portraitUrl" : "www.pig.com"
+}

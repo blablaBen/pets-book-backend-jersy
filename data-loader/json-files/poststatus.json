@@ -1,0 +1,430 @@
+{ 
+    "_id" : ObjectId("5bfcb46469c4f102f34cb4f9"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi! I have changed this status", 
+    "date" : ISODate("2018-11-27T03:05:08.765+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb47269c4f102f34cb4fa"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my first status", 
+    "date" : ISODate("2018-11-27T03:05:22.508+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb47869c4f102f34cb4fb"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my first status", 
+    "date" : ISODate("2018-11-27T03:05:28.623+0000"), 
+    "commentCount" : NumberInt(2), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb47a69c4f102f34cb4fc"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my first status", 
+    "date" : ISODate("2018-11-27T03:05:30.037+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb47f69c4f102f34cb4fd"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my second status", 
+    "date" : ISODate("2018-11-27T03:05:35.939+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfccf0c69c4f102f38929fc"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my second status", 
+    "date" : ISODate("2018-11-27T04:58:52.779+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd09369c4f102f38929fd"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:05:23.897+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd09669c4f102f38929fe"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:05:26.772+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13869c4f102f38929ff"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:08.344+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13a69c4f102f3892a00"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:10.415+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13a69c4f102f3892a01"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:10.794+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13b69c4f102f3892a02"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:11.424+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13c69c4f102f3892a03"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:12.089+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13c69c4f102f3892a04"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:12.620+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13d69c4f102f3892a05"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:13.208+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13d69c4f102f3892a06"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:13.736+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd13e69c4f102f3892a07"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:08:14.412+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd1ac69c4f102f3892a08"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:10:04.008+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd22369c4f102f3892a0a"), 
+    "userId" : "5bfcd1fd964ac405a48fafc0", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:12:03.893+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd22469c4f102f3892a0b"), 
+    "userId" : "5bfcd1fd964ac405a48fafc0", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:12:04.691+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd22569c4f102f3892a0c"), 
+    "userId" : "5bfcd1fd964ac405a48fafc0", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:12:05.615+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcd22669c4f102f3892a0d"), 
+    "userId" : "5bfcd1fd964ac405a48fafc0", 
+    "textValue" : "Hi!, this is my last status", 
+    "date" : ISODate("2018-11-27T05:12:06.552+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcde4a69c4f102f3687396"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today", 
+    "date" : ISODate("2018-11-27T06:03:54.152+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcde9269c4f102f3687397"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today 2", 
+    "date" : ISODate("2018-11-27T06:05:06.043+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "xxx.yyy.jpg"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcde9e69c4f102f3687398"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today 5", 
+    "date" : ISODate("2018-11-27T06:05:18.126+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "xxx.xxx.jpg"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcdea469c4f102f3687399"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today 999", 
+    "date" : ISODate("2018-11-27T06:05:24.005+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "xxx.xxx.jpg"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf09669c4f102fd329dd2"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:21:58.501+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf0a069c4f102fd329dd3"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:22:08.239+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf0ae69c4f102fd329dd4"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:22:22.081+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf0af69c4f102fd329dd5"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:22:23.265+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf0bd69c4f102fd329dd6"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:22:37.287+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf17669c4f102fd329dd7"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today 999", 
+    "date" : ISODate("2018-11-27T07:25:42.735+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "xxx.xxx.jpg"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf25c69c4f102fd83ba50"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "textValue" : "I am very happy today 999", 
+    "date" : ISODate("2018-11-27T07:29:32.225+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "xxx.xxx.jpg"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf28769c4f102fd83ba51"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:30:15.591+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf2b569c4f102fd83ba52"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:31:01.264+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcf2c069c4f102fd83ba53"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "textValue" : "Hi!, this is my test status", 
+    "date" : ISODate("2018-11-27T07:31:12.094+0000"), 
+    "commentCount" : NumberInt(0), 
+    "pictures" : [
+        {
+            "url" : "www.xx.yyy"
+        }
+    ]
+}

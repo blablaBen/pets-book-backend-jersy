@@ -1,0 +1,144 @@
+{ 
+    "_id" : ObjectId("5bfc8bcf69c4f102f3774c24"), 
+    "key" : "asdf@hotmail.com", 
+    "email" : "asdf@hotmail.com", 
+    "password" : "eef490b0e950e9b45aef42d06fe7b0e1", 
+    "profileName" : "superVet888", 
+    "userType" : NumberInt(2), 
+    "userLevel" : NumberInt(3), 
+    "userScore" : "5K6xJRUEJ2s+Xs3M66Tf/A==", 
+    "portraitUrl" : "http://xbsjh.com/newPortrait.jpg", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfc8c8f69c4f102f3774c26"), 
+    "key" : "user@hotmail.com", 
+    "email" : "user@hotmail.com", 
+    "password" : "00c66aaf5f2c3f49946f15c1ad2ea0d3", 
+    "profileName" : "newUser666", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "http://xbsjh.com/77777.jpg", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfc8ca269c4f102f3774c28"), 
+    "key" : "user222@hotmail.com", 
+    "email" : "user222@hotmail.com", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "newUser888", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "http://xbsjh.com/77777.jpg", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfc8cbd69c4f102f3774c2a"), 
+    "key" : "vet222@hotmail.com", 
+    "email" : "vet222@hotmail.com", 
+    "password" : "fe743d8d97aa7dfc6c93ccdc2e749513", 
+    "profileName" : "newVet222", 
+    "userType" : NumberInt(2), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "http://xbsjh.com/77777.jpg", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfca9e869c4f102f34cb4f0"), 
+    "key" : "bla.bla.iphone6s@gmail.com", 
+    "email" : "bla.bla.iphone6s@gmail.com", 
+    "password" : "", 
+    "profileName" : "Bla Bla", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "https://lh5.googleusercontent.com/-U2V-ASHbRzI/AAAAAAAAAAI/AAAAAAAAAAA/AGDgw-g2fIrKxbt4VbvR5g93q6sh_q9xiA/s96-c/photo.jpg", 
+    "isSSOUser" : true
+}
+{ 
+    "_id" : ObjectId("5bfcab8c69c4f102f34cb4f2"), 
+    "key" : "pattarasai.markpeng@west.cmu.edu", 
+    "email" : "pattarasai.markpeng@west.cmu.edu", 
+    "password" : "", 
+    "profileName" : "Pattarasai Markpeng", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "https://lh3.googleusercontent.com/-NoPftUi1JEY/AAAAAAAAAAI/AAAAAAAAAAA/AGDgw-hg2GoPa3ziyI5EKhq-ADtVWjLDXQ/s96-c/photo.jpg", 
+    "isSSOUser" : true
+}
+{ 
+    "_id" : ObjectId("5bfcb3fb69c4f102f34cb4f7"), 
+    "key" : "pmarkpen@andrew.cmu.edu", 
+    "email" : "pmarkpen@andrew.cmu.edu", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "pattarasai", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(3), 
+    "userScore" : "7F+RCwbhyiteB2XNTcEa8w==", 
+    "portraitUrl" : "www.xxx.yyy", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfcb4ab69c4f102f34cb4fe"), 
+    "key" : "pmarkpen@andrew.cmu.edu", 
+    "email" : "pmarkpen@andrew.cmu.edu", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "pattarasai", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "www.xxx.yyy", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfcb50569c4f102f38929fa"), 
+    "key" : "pmarkpen2@andrew.cmu.edu", 
+    "email" : "pmarkpen2@andrew.cmu.edu", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "pattarasai2", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(3), 
+    "userScore" : "IFGI9EKzREOp8ItKx096KQ==", 
+    "portraitUrl" : "www.xxx.yyy", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfce09769c4f102f33bbfde"), 
+    "key" : "pmarkpen5@andrew.cmu.edu", 
+    "email" : "pmarkpen5@andrew.cmu.edu", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "pattarasai2", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "www.xxx.yyy", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfce13469c4f102f33bbfe1"), 
+    "key" : "vet@andrew.cmu.edu", 
+    "email" : "vet@andrew.cmu.edu", 
+    "password" : "e10adc3949ba59abbe56e057f20f883e", 
+    "profileName" : "vet at CMU", 
+    "userType" : NumberInt(2), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "www.xxx.yyy", 
+    "isSSOUser" : false
+}
+{ 
+    "_id" : ObjectId("5bfce57469c4f102f3bae41e"), 
+    "key" : "pattarasai.markpeng@gmail.com", 
+    "email" : "pattarasai.markpeng@gmail.com", 
+    "password" : "", 
+    "profileName" : "Pattarasai Markpeng", 
+    "userType" : NumberInt(1), 
+    "userLevel" : NumberInt(1), 
+    "userScore" : "DtkevYLAAVyedA4PaS+pSg==", 
+    "portraitUrl" : "https://lh3.googleusercontent.com/-eM9F6W-07ls/AAAAAAAAAAI/AAAAAAAACr4/B_bHnSYVTt0/s96-c/photo.jpg", 
+    "isSSOUser" : true
+}

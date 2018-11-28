@@ -1,0 +1,22 @@
+{
+  "name": "data-loader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "import:user": "mongoimport --db app --collection user --file json-files/user.json",
+    "import:post": "mongoimport --db app --collection poststatus --file json-files/poststatus.json",
+    "import:forgetPassword": "mongoimport --db app --collection forgetPassword --file json-files/forgetPassword.json",
+    "import:follow": "mongoimport --db app --collection follow --file json-files/follow.json",
+    "import:comment": "mongoimport --db app --collection comment --file json-files/comment.json",
+    "import:chat_room": "mongoimport --db app --collection chat_room --file json-files/chat_room.json",
+    "import:chat_message": "mongoimport --db app --collection chat_message --file json-files/chat_message.json",
+    "dropDatabase:app": "node drop-app-db.js",
+    "import:all": "npm run dropDatabase:app && npm run import:user && npm run import:post && npm run import:forgetPassword && npm run import:follow && npm run import:comment && npm run import:chat_room && npm run import:chat_message"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "2.2.31"
+  }
+}

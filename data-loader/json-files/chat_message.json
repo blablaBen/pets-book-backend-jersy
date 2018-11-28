@@ -1,0 +1,14 @@
+{ 
+    "_id" : ObjectId("5bfce2ad69c4f102f33bbfe9"), 
+    "chatRoomId" : "5bfce20c69c4f102f33bbfe6", 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "message" : "Hi, I need some advise from you Vet CMU!", 
+    "time" : ISODate("2018-11-27T06:22:37.523+0000")
+}
+{ 
+    "_id" : ObjectId("5bfce36669c4f102f33bbfec"), 
+    "chatRoomId" : "5bfce20c69c4f102f33bbfe6", 
+    "userId" : "5bfce13469c4f102f33bbfe1", 
+    "message" : "Ok, go ahead!", 
+    "time" : ISODate("2018-11-27T06:25:42.443+0000")
+}

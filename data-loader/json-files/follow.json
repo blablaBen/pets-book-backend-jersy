@@ -1,0 +1,120 @@
+{ 
+    "_id" : ObjectId("5bfc8bcf69c4f102f3774c25"), 
+    "userId" : "5bfc8bcf69c4f102f3774c24", 
+    "following" : [
+        "5bfc8c8f69c4f102f3774c26"
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfc8c8f69c4f102f3774c27"), 
+    "userId" : "5bfc8c8f69c4f102f3774c26", 
+    "following" : [
+
+    ], 
+    "followed" : [
+        "5bfc8bcf69c4f102f3774c24"
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfc8ca269c4f102f3774c29"), 
+    "userId" : "5bfc8ca269c4f102f3774c28", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfc8cbd69c4f102f3774c2b"), 
+    "userId" : "5bfc8cbd69c4f102f3774c2a", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfca9e869c4f102f34cb4f1"), 
+    "userId" : "5bfca9e869c4f102f34cb4f0", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcab8c69c4f102f34cb4f3"), 
+    "userId" : "5bfcab8c69c4f102f34cb4f2", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb3fb69c4f102f34cb4f8"), 
+    "userId" : "5bfcb3fb69c4f102f34cb4f7", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb4ab69c4f102f34cb4ff"), 
+    "userId" : "5bfcb4ab69c4f102f34cb4fe", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfcb50669c4f102f38929fb"), 
+    "userId" : "5bfcb50569c4f102f38929fa", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfce09769c4f102f33bbfdf"), 
+    "userId" : "5bfce09769c4f102f33bbfde", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfce13469c4f102f33bbfe2"), 
+    "userId" : "5bfce13469c4f102f33bbfe1", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
+{ 
+    "_id" : ObjectId("5bfce57469c4f102f3bae41f"), 
+    "userId" : "5bfce57469c4f102f3bae41e", 
+    "following" : [
+
+    ], 
+    "followed" : [
+
+    ]
+}
